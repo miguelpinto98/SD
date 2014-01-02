@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class Servidor {
     
-    private HashMap<String,Cliente> utilizadores;
+    private HashMap<String,Utilizador> utilizadores;
     private HashMap<Integer,Projecto> projectos;
     
 	public static int CODIGO=1;

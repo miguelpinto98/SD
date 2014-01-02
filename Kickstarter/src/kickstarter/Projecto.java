@@ -9,7 +9,7 @@ public class Projecto {
 	private double montanteRequerido;
 	private double montanteAdquirido;
 	private boolean financiamento;
-	private HashMap<String,Cliente> ofertas;
+	private HashMap<String,Utilizador> ofertas;
 
 	public Projecto() {
 		this.codigo = 0;
