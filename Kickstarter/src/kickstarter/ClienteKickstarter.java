@@ -63,17 +63,35 @@ public class ClienteKickstarter {
                     o = new ObjectOutputStream(s.getOutputStream());
                     o.writeObject(p);
                     o.flush();
+                    
+            		BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
+                    String result = sktInput.readLine();
+                    
+                    if(result.equals("Entrou"))
+                    	menuPrincipal();
+                    else
+                    	System.err.println("Autenticação falhada");
         		}
         		else {
         			if(opt == 3)
         				System.exit(3);
         			else
-        				System.out.println("Opção Inválida!");
+        				System.out.println("Opção inválida!");
         		}
         	}
         		
         } while(true);
 
+    }
+    
+    public static void menuPrincipal() {
+    	System.out.println(" 1 - Criar projeto");
+    	System.out.println(" 2 - Financiar projeto");
+    	System.out.println(" 3 - Lista projetos ainda não financiados");
+    	System.out.println(" 4 - Lista projetos com financiamento garantido");
+    	System.out.println(" 5 - Até já");
+    	
+    	int opt = in.nextInt();
     }
     
     public static int menuInicial() {

@@ -39,7 +39,7 @@ public class Handler extends Thread {
 				Pacote pacote = (Pacote) sInput.readObject();
 
 				if (pacote.getAccao().equals(ServidorKickstarter.REGISTAR)) {
-					System.out.println("Recebeu pacote Registar");
+					System.err.println("Recebeu pacote Registar"+"[2J");
 					String nick = pacote.getArgumentos().get(ServidorKickstarter.NOME_USER);
 					String pw = pacote.getArgumentos().get(ServidorKickstarter.PW_USER);
 
@@ -55,13 +55,17 @@ public class Handler extends Thread {
 					sOutput.flush();
 				} else {
 					if (pacote.getAccao().equals(ServidorKickstarter.ENTRAR)) {
-						System.out.println("Pacote Entrar");
+						System.err.println("Pacote Entrar");
 						String nick = pacote.getArgumentos().get(ServidorKickstarter.NOME_USER);
 						String pw = pacote.getArgumentos().get(ServidorKickstarter.PW_USER);
 
 						System.out.println(nick + pw);
 						boolean existe = sk.validaUser(nick, pw);
 						System.out.println(existe);
+						
+						if(existe)
+							sOutput.println("Entrou");
+						sOutput.flush();
 					}
 				}
 			} while (true);
