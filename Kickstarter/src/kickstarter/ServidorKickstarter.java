@@ -27,6 +27,9 @@ public class ServidorKickstarter {
     public static final String DESC_PROJETO = "DescricaoProjeto";
     public static final String MONTANTE_PROJETO = "MontantePRojeto";
    
+    
+    public static final String PROJETO = "Projeto ";
+
     private static Kickstarter k = null;
 	
     public static void main(String args[]) throws IOException, ClassNotFoundException {
@@ -41,7 +44,4 @@ public class ServidorKickstarter {
             thread.start();
         }
     }
-    
-    
-	
 }
