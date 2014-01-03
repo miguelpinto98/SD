@@ -6,59 +6,66 @@
 
 package kickstarter;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
- *
+ * 
  * @author serafim
  */
 public class Handler extends Thread {
-    private Socket s;
-    
-    public Handler(Socket s) {
+	private Socket s;
+	private Kickstarter sk;
+	private ObjectInputStream sInput;
+	private PrintWriter sOutput;
+
+	public Handler(Socket s, Kickstarter k) {
         this.s= s;
-    }
-    
-    public void run() {
-    
-        try {
-              //Ler do input
-            ObjectInputStream in = new ObjectInputStream(s.getInputStream());
-            
-        //Tudo o que lê do input é o pacote
-            Pacote pacote = (Pacote) in.readObject();
-            
+        this.sk = k;
         
-        if(pacote.getAccao().equals(ServidorKickstarter.REGISTAR)) {
-            System.out.println("Recebeu pacote Registar");
-            System.out.println(pacote.getArgumentos().get(ServidorKickstarter.NOME_USER) + pacote.getArgumentos().get(ServidorKickstarter.PW_USER));
-            
-        }
-            
-        } catch (Exception e) {
-        }
-       
+        
     }
-    
-    public boolean registaUtilizador(String nick, String pass) {
-    	boolean res = false;
-    	
-    	if(!ServidorKickstarter.utilizadores.containsKey(nick)) {
-    		Utilizador u = new Utilizador(nick, pass);
-    		ServidorKickstarter.utilizadores.put(nick, u);
-    		res = true;
-    	}
-    	return res;
-    }
-    
-     public boolean validaUser(String nick, String pass) {
-    	boolean res=false;
-    	
-    	if(ServidorKickstarter.utilizadores.containsKey(nick)) {
-    		if(ServidorKickstarter.utilizadores.get(nick).getPassword().equals(pass))
-    			res= true; 		
-    	}
-    	return res;
-    }
+
+	public void run() {
+		String result = new String();
+		
+		try {
+			do {
+				this.sInput = new ObjectInputStream(s.getInputStream());
+				this.sOutput = new PrintWriter(s.getOutputStream());
+				
+				Pacote pacote = (Pacote) sInput.readObject();
+
+				if (pacote.getAccao().equals(ServidorKickstarter.REGISTAR)) {
+					System.out.println("Recebeu pacote Registar");
+					String nick = pacote.getArgumentos().get(ServidorKickstarter.NOME_USER);
+					String pw = pacote.getArgumentos().get(ServidorKickstarter.PW_USER);
+
+					System.out.println("USER: " + nick + pw);
+					boolean existe = sk.registaUtilizador(nick, pw);
+					System.out.println("Registado? "+existe);
+					
+					if(existe)
+						sOutput.println("Inserido com Sucesso");
+					else
+						sOutput.println("Utilizador já existe");
+					
+					sOutput.flush();
+				} else {
+					if (pacote.getAccao().equals(ServidorKickstarter.ENTRAR)) {
+						System.out.println("Pacote Entrar");
+						String nick = pacote.getArgumentos().get(ServidorKickstarter.NOME_USER);
+						String pw = pacote.getArgumentos().get(ServidorKickstarter.PW_USER);
+
+						System.out.println(nick + pw);
+						boolean existe = sk.validaUser(nick, pw);
+						System.out.println(existe);
+					}
+				}
+			} while (true);
+		} catch (Exception e) {
+		}
+	}
 }
