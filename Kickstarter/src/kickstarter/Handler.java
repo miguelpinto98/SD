@@ -1,20 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package kickstarter;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashSet;
 
-/**
- * 
- * @author serafim
- */
 public class Handler extends Thread {
 	private Socket s;
 	private Kickstarter sk;
@@ -23,14 +13,10 @@ public class Handler extends Thread {
 
 	public Handler(Socket s, Kickstarter k) {
         this.s= s;
-        this.sk = k;
-        
-        
+        this.sk = k;  
     }
 
-	public void run() {
-		String result = new String();
-		
+	public void run() {		
 		try {
 			do {
 				this.sInput = new ObjectInputStream(s.getInputStream());
@@ -66,8 +52,7 @@ public class Handler extends Thread {
 						if(existe)
 							sOutput.println("Entrou");
 						sOutput.flush();
-					}
-                    else {
+					} else {
                         if (pacote.getAccao().equals(ServidorKickstarter.CRIAR_PROJETO)){
                             System.err.println("Pacote CriarProjeto");
                             String nome = pacote.getArgumentos().get(ServidorKickstarter.NOME_PROJETO);
@@ -84,6 +69,18 @@ public class Handler extends Thread {
                                 sOutput.println("Projeto nao criado");
 						
                             sOutput.flush();
+                        } else {
+                        	if(pacote.getAccao().equals(ServidorKickstarter.LISTANAOFINANCIADOS)) {
+                                System.err.println("Pacote Listar");
+                                String desc = pacote.getArgumentos().get(ServidorKickstarter.DESC_PROJETO);
+                                System.out.println(desc);
+                                HashSet<Projecto> projetos = sk.devolveProjetosAtivos(desc);
+                                
+                                sOutput.println(projetos); //FALTA "LEVAR" O OBJECTO
+                                sOutput.flush();
+                            }
+                        	else
+                        		;
                         }
                     }
 				}

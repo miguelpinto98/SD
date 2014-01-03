@@ -21,7 +21,6 @@ public class ClienteKickstarter {
     
     public static String nick = null; 
     
-    
     public static ObjectInputStream i = null;
     
     public static void main(String args[]) throws IOException {
@@ -127,13 +126,35 @@ public class ClienteKickstarter {
 		
 	}
 
-	private static void MenuListaProjetosNaoFinanciados() {
-		// TODO Auto-generated method stub
-		
+	private static void MenuListaProjetosNaoFinanciados() throws IOException {
+		in.nextLine();
+        System.out.println("Descrição:");
+        String desc = in.next();
+        
+        hash = new HashMap<>();
+        hash.put(ServidorKickstarter.DESC_PROJETO, desc);
+        p = new Pacote(ServidorKickstarter.REGISTAR,hash);
+                
+        criarObjeto(p);
+                
+        BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
+        System.out.println(sktInput.readLine());
 	}
 
-	private static void MenuFinanciarProjeto() {
+	private static void MenuFinanciarProjeto() throws IOException {
+		in.nextLine();
+		System.out.println("Insira o id do projeto a financiar: ");
+		int id = in.nextInt();
+		System.out.println("Insira montante que pretende financiar: ");
+		double montante = in.nextDouble();
 		
+		hash = new HashMap<>();
+		hash.put(ServidorKickstarter.NOME_USER, nick);
+		hash.put(ServidorKickstarter.ID, Integer.toString(id));
+		hash.put(ServidorKickstarter.MONTANTE, Double.toString(montante));
+		p = new Pacote(ServidorKickstarter.FINANCIAR, hash);
+		
+		criarObjeto(p);	
 	}
 
 	private static void MenuCriarProjeto() throws IOException{
@@ -169,4 +190,10 @@ public class ClienteKickstarter {
         
         return in.nextInt();    
     }
+	
+	public static void criarObjeto(Pacote p) throws IOException {
+		o = new ObjectOutputStream(s.getOutputStream());
+        o.writeObject(p);
+        o.flush();
+	}
 }
