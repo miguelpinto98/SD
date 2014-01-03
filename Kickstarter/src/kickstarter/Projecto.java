@@ -1,6 +1,6 @@
 package kickstarter;
 
-import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class Projecto {
 	private int codigo;
@@ -9,8 +9,8 @@ public class Projecto {
 	private String descricao;
 	private double montanteRequerido;
 	private double montanteAdquirido;
-	private boolean financiamento;
-	private TreeMap<String,Utilizador> ofertas;
+	private boolean terminado;
+	private TreeSet<Oferta> ofertas;
 
 	public Projecto() {
 		this.codigo = 0;
@@ -18,7 +18,7 @@ public class Projecto {
 		this.descricao = "";
 		this.montanteRequerido = 0;
 		this.montanteAdquirido = -1;
-		this.financiamento = false;
+		this.terminado = false;
 	}
 
 	public Projecto(String n, String d, double m, Utilizador u) {
@@ -28,7 +28,7 @@ public class Projecto {
 		this.descricao = d;
 		this.montanteRequerido = m;
 		this.montanteAdquirido = 0;
-		this.financiamento = false;
+		this.terminado = false;
 		Kickstarter.CODIGO++;
 	}
 
@@ -38,7 +38,7 @@ public class Projecto {
 		this.descricao = p.getDescricao();
 		this.montanteRequerido = p.getMontanteRequerido();
 		this.montanteAdquirido = p.getMontanteAdquirido();
-		this.financiamento = p.getFinanciamento();
+		this.terminado = p.isTerminado();
 	} 
 
 	public int getCodigo() {
@@ -65,8 +65,17 @@ public class Projecto {
 		return this.montanteAdquirido;
 	}
 	
-	public boolean getFinanciamento() {
-		return this.financiamento;
+	public boolean isTerminado() {
+		return this.terminado;
+	}
+	
+	public TreeSet<Oferta> getOfertas() {
+		TreeSet<Oferta> res = new TreeSet<>();
+		
+		for(Oferta o : this.ofertas)
+			res.add(o.clone());
+		
+		return res;
 	}
 
 	public void setMontanteAquirido(double m) {
@@ -74,7 +83,7 @@ public class Projecto {
 	}
 
 	public void setFinanciamento(boolean f) {
-		this.financiamento = f;
+		this.terminado = f;
 	}
 
 	public Projecto clone() {
@@ -88,7 +97,7 @@ public class Projecto {
 		s.append("Descricao: " + this.getDescricao());	
 		s.append("Montante Requerido: " + this.getMontanteRequerido());
 		s.append("Montante já Adquirido: " + this.getMontanteAdquirido());        
-		s.append("Financiamento Assegurado: " + this.getFinanciamento());
+		s.append("Financiamento Assegurado: " + this.isTerminado());
 		return s.toString();
 	}
 
@@ -104,9 +113,17 @@ public class Projecto {
 	}
 
 	public synchronized void ajudarFinanciamento(String nick, double montante) {
-		//this.ofertas.put(key, value)
 		this.montanteRequerido += montante;
 		
+		for(Oferta o : this.ofertas) {
+			if(o.getNick().equals(nick)) {
+				double ant = o.getDoado();
+				this.ofertas.remove(o);
+				this.ofertas.add(new Oferta(nick, ant+montante));
+			}
+			else
+				this.ofertas.add(new Oferta(nick,montante));				
+		}	
 		notifyAll();
 	}
 }

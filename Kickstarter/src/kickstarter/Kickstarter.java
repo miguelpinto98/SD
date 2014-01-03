@@ -1,6 +1,9 @@
 package kickstarter;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.TreeSet;
 
 public class Kickstarter {
     
@@ -29,6 +32,7 @@ public class Kickstarter {
 	public void ajudarProjeto(String nick, int idproj, double montante) {
 		synchronized (this.projectos.get(idproj)) {
 			this.projectos.get(idproj).ajudarFinanciamento(nick, montante);
+		
 			
 		}
 	}
@@ -49,8 +53,41 @@ public class Kickstarter {
     	
     	if(this.utilizadores.containsKey(nick)) {
     		if(this.utilizadores.get(nick).getPassword().equals(pass))
-    			//Talvez ativar um boolean dentro do utilizador
     			res= true; 		
+    	}
+    	return res;
+    }
+    
+    public HashSet<Projecto> devolveProjetosAtivos(String desc) {
+    	HashSet<Projecto> res = new HashSet<>();
+    	
+    	for(Projecto p : this.projectos.values())
+    		if(!p.isTerminado() && p.getDescricao().contains(desc))
+    			res.add(p);
+    	
+    	return res;
+    }
+    
+    public HashSet<Projecto> devolveProjetoTerminado(String desc) {
+    	HashSet<Projecto> res = new HashSet<>();
+    	
+    	for(Projecto p : this.projectos.values())
+    		if(p.isTerminado() && p.getDescricao().contains(desc))
+    			res.add(p);
+    	
+    	return res;
+    }
+    
+    public TreeSet<Oferta> devolveProjectoContribuidores(int id, int n) {
+    	TreeSet<Oferta> res = new TreeSet<>();
+    	TreeSet<Oferta> ts = this.projectos.get(id).getOfertas();
+    	int i=0;
+    	
+    	Iterator<Oferta> it = ts.iterator();
+    	
+    	while(it.hasNext() && i<n) {
+    		res.add(it.next());
+    		i++;
     	}
     	return res;
     }
