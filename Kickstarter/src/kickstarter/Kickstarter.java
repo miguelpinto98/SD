@@ -54,7 +54,7 @@ public class Kickstarter {
 		return res;
 	}
 
-	public boolean novoProjeto(Utilizador u, String nProj, String desc,
+	public synchronized boolean novoProjeto(Utilizador u, String nProj, String desc,
 			double montante) throws InterruptedException {
 		boolean res = false;
 		Projecto p = new Projecto(nProj, desc, montante, u);
@@ -62,7 +62,7 @@ public class Kickstarter {
 		if (!this.projectos.containsKey(p.getCodigo())) {
 			this.projectos.put(p.getCodigo(), p);
 			res = true;
-			wait(); // Coloca utilizador/cliente em wait até obter financiamento
+			wait();
 		}
 		return res;
 	}
