@@ -160,8 +160,6 @@ public class ClienteKickstarter {
                     
         BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
         System.out.println(sktInput.readLine());
-        
-        menuPrincipal();
 	}
 
 	public static int menuInicial() {
