@@ -22,14 +22,14 @@ public class Projecto {
 	}
 
 	public Projecto(String n, String d, double m, Utilizador u) {
-		this.codigo = Kickstarter.CODIGO;
+		this.codigo = ServidorKickstarter.CODIGO;
 		this.user = u;
 		this.nome = n;
 		this.descricao = d;
 		this.montanteRequerido = m;
 		this.montanteAdquirido = 0;
 		this.terminado = false;
-		Kickstarter.CODIGO++;
+		ServidorKickstarter.CODIGO++;
 	}
 
 	public Projecto(Projecto p) {

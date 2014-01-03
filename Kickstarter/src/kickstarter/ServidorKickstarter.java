@@ -1,18 +1,45 @@
 package kickstarter;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-public class Kickstarter {
+public class ServidorKickstarter {
     
-    private HashMap<String,Utilizador> utilizadores;
-    private HashMap<Integer,Projecto> projectos;
+    public static HashMap<String,Utilizador> utilizadores;
+    public static HashMap<Integer,Projecto> projectos;
     
 	public static int CODIGO=1;
+    public static int PORTA=9999;
+    public static String REGISTAR = "RegistarUser";
+    public static String NOME_USER = "NomeUser";
+    public static String PW_USER = "PwUser";
 	
-	public Kickstarter() {
+    public static void main(String args[]) throws IOException, ClassNotFoundException {
+        ServerSocket sv = new ServerSocket(PORTA);
+        
+        while(true) {
+            Socket cliente = sv.accept();
+            System.out.println("Registar");
+            
+            Handler thread = new Handler(cliente);
+            thread.start();
+        }
+    }
+    
+    
+	public ServidorKickstarter() {
 		this.utilizadores = new HashMap<>();
 		this.projectos = new HashMap<>();
 	}
@@ -37,26 +64,6 @@ public class Kickstarter {
 		}
 	}
     
-    public boolean registaUtilizador(String nick, String pass) {
-    	boolean res = false;
-    	
-    	if(!this.utilizadores.containsKey(nick)) {
-    		Utilizador u = new Utilizador(nick, pass);
-    		this.utilizadores.put(nick, u);
-    		res = true;
-    	}
-    	return res;
-    }
-    
-    public boolean validaUser(String nick, String pass) {
-    	boolean res=false;
-    	
-    	if(this.utilizadores.containsKey(nick)) {
-    		if(this.utilizadores.get(nick).getPassword().equals(pass))
-    			res= true; 		
-    	}
-    	return res;
-    }
     
     public HashSet<Projecto> devolveProjetosAtivos(String desc) {
     	HashSet<Projecto> res = new HashSet<>();
