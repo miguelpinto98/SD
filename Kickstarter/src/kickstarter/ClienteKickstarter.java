@@ -13,6 +13,7 @@ public class ClienteKickstarter {
     private static String ip = "localhost";
     private static int port = 9999;
     private static Socket s = null;
+    private static String userAtivo = null;
     
     public static Scanner in = new Scanner(System.in);
     public static HashMap<String, String> hash = new HashMap<>();
@@ -85,7 +86,7 @@ public class ClienteKickstarter {
 
     }
     
-    public static void menuPrincipal() {
+    public static void menuPrincipal() throws IOException {
     	System.out.println(" 1 - Criar projeto");
     	System.out.println(" 2 - Financiar projeto");
     	System.out.println(" 3 - Lista projetos ainda não financiados");
@@ -126,8 +127,20 @@ public class ClienteKickstarter {
 		
 	}
 
-	private static void MenuFinanciarProjeto() {
+	private static void MenuFinanciarProjeto() throws IOException {
+		in.nextLine();
+		System.out.println("Insira o id do projeto a financiar: ");
+		int id = in.nextInt();
+		System.out.println("Insira montante que pretende financiar: ");
+		double montante = in.nextDouble();
 		
+		hash = new HashMap<>();
+		hash.put(ServidorKickstarter.NOME_USER, userAtivo);
+		hash.put(ServidorKickstarter.ID, Integer.toString(id));
+		hash.put(ServidorKickstarter.MONTANTE, Double.toString(montante));
+		p = new Pacote(ServidorKickstarter.FINANCIAR, hash);
+		
+		criarObjeto(p);	
 	}
 
 	private static void MenuCriarProjeto() {
@@ -140,4 +153,10 @@ public class ClienteKickstarter {
         
         return in.nextInt();    
     }
+	
+	public static void criarObjeto(Pacote p) throws IOException {
+		o = new ObjectOutputStream(s.getOutputStream());
+        o.writeObject(p);
+        o.flush();
+	}
 }

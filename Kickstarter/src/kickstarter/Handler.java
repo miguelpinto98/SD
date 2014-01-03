@@ -67,6 +67,7 @@ public class Handler extends Thread {
 							sOutput.println("Entrou");
 						sOutput.flush();
 					}
+					else {}
 				}
 			} while (true);
 		} catch (Exception e) {
