@@ -64,8 +64,6 @@ public class Kickstarter {
 		if (!this.projectos.containsKey(p.getCodigo())) {
 			this.projectos.put(p.getCodigo(), p);
 			res = true;
-            System.out.println("entrou no wait");
-			wait();
 		}
 		return res;
 	}

@@ -91,7 +91,7 @@ public class ClienteKickstarter {
 
     }
     
-    public static void menuPrincipal() {
+    public static void menuPrincipal() throws IOException {
     	System.out.println(" 1 - Criar projeto");
     	System.out.println(" 2 - Financiar projeto");
     	System.out.println(" 3 - Lista projetos ainda não financiados");
@@ -115,7 +115,7 @@ public class ClienteKickstarter {
     		if(opt == 6)
     			System.exit(0);
     		else
-    			System.out.println("Opão inválida");	
+    			System.out.println("Opcão inválida");	
     	} while(opt<6);
     }
     
@@ -136,7 +136,32 @@ public class ClienteKickstarter {
 		
 	}
 
-	private static void MenuCriarProjeto() {
+	private static void MenuCriarProjeto() throws IOException{
+        in.nextLine();
+        String user = nick;
+        System.out.println("Nome projeto");
+        String nomeProjeto = in.next();
+        System.out.println("Descrição projeto");
+        String descProjeto = in.next();
+        System.out.println("Montante necessário para o projeto");
+        String montanteProjeto = in.next();
+                    
+        hash = new HashMap<>();
+        hash.put(ServidorKickstarter.NOME_USER, nick);
+        hash.put(ServidorKickstarter.NOME_PROJETO, nomeProjeto);
+        hash.put(ServidorKickstarter.DESC_PROJETO, descProjeto);
+        hash.put(ServidorKickstarter.MONTANTE_PROJETO,montanteProjeto);
+                    
+        p = new Pacote(ServidorKickstarter.CRIAR_PROJETO,hash);
+                    
+        o = new ObjectOutputStream(s.getOutputStream());
+        o.writeObject(p);
+        o.flush();
+                    
+        BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
+        System.out.println(sktInput.readLine());
+        
+        menuPrincipal();
 	}
 
 	public static int menuInicial() {
