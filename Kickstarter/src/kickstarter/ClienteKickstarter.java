@@ -3,6 +3,7 @@ package kickstarter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.HashMap;
@@ -11,16 +12,16 @@ import java.util.Scanner;
 public class ClienteKickstarter {
     private static String ip = "localhost";
     private static int port = 9999;
+    private static Socket s = null;
     
     public static Scanner in = new Scanner(System.in);
     public static HashMap<String, String> hash = new HashMap<>();
     public static Pacote p = null;
     public static ObjectOutputStream o = null;
-    
-    
+    public static ObjectInputStream i = null;
     
     public static void main(String args[]) throws IOException {
-        Socket s = new Socket(ip,port);
+        s = new Socket(ip,port);
         int opt;
         
         do {
@@ -89,17 +90,54 @@ public class ClienteKickstarter {
     	System.out.println(" 2 - Financiar projeto");
     	System.out.println(" 3 - Lista projetos ainda não financiados");
     	System.out.println(" 4 - Lista projetos com financiamento garantido");
-    	System.out.println(" 5 - Até já");
+    	System.out.println(" 5 - Obter informações projeto");
+    	System.out.println(" 6 - Até já");
     	
     	int opt = in.nextInt();
+    	
+    	do {
+    		if(opt == 1 )
+    			MenuCriarProjeto();
+    		if(opt == 2)
+    			MenuFinanciarProjeto();
+    		if(opt == 3)
+    			MenuListaProjetosNaoFinanciados();
+    		if(opt == 4)
+    			MenuListaProjetosGarantidos();
+    		if(opt == 5)
+    			MenuInformacoesProjeto();
+    		if(opt == 6)
+    			System.exit(0);
+    		else
+    			System.out.println("Opão inválida");	
+    	} while(opt<6);
     }
     
-    public static int menuInicial() {
+    private static void MenuInformacoesProjeto() {
+	}
+
+	private static void MenuListaProjetosGarantidos() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void MenuListaProjetosNaoFinanciados() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void MenuFinanciarProjeto() {
+		
+	}
+
+	private static void MenuCriarProjeto() {
+	}
+
+	public static int menuInicial() {
     	System.out.println("1 - Registar");
         System.out.println("2 - Entrar");
         System.out.println("3 - Sair");
         
         return in.nextInt();    
     }
-    
 }

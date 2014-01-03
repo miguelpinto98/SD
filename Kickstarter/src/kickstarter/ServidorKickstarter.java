@@ -22,6 +22,9 @@ public class ServidorKickstarter {
     public static String NOME_USER = "NomeUser";
     public static String PW_USER = "PwUser";
     public static final String ENTRAR = "Entrar";
+    
+    
+    public static final String PROJETO = "Projeto ";
 
     private static Kickstarter k = null;
 	

@@ -48,8 +48,10 @@ public class Kickstarter {
 		boolean res = false;
 
 		if (this.utilizadores.containsKey(nick)) {
-			if (this.utilizadores.get(nick).getPassword().equals(pass))
+			if (this.utilizadores.get(nick).getPassword().equals(pass)) {
+				this.utilizadores.get(nick).setAtivo(true);
 				res = true;
+			}
 		}
 		return res;
 	}
