@@ -4,7 +4,6 @@ public class Utilizador {
 	private String nickname;	
 	private String password;
 
-
 	public Utilizador() {
 		this.nickname = "";
 		this.password = "";

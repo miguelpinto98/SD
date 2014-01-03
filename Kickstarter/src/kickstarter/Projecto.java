@@ -1,15 +1,16 @@
 package kickstarter;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 
 public class Projecto {
 	private int codigo;
+	private Utilizador user;
 	private String nome;
 	private String descricao;
 	private double montanteRequerido;
 	private double montanteAdquirido;
 	private boolean financiamento;
-	private HashMap<String,Utilizador> ofertas;
+	private TreeMap<String,Utilizador> ofertas;
 
 	public Projecto() {
 		this.codigo = 0;
@@ -20,14 +21,15 @@ public class Projecto {
 		this.financiamento = false;
 	}
 
-	public Projecto(String n, String d, Float m) {
-		this.codigo = Servidor.CODIGO;
+	public Projecto(String n, String d, double m, Utilizador u) {
+		this.codigo = Kickstarter.CODIGO;
+		this.user = u;
 		this.nome = n;
 		this.descricao = d;
 		this.montanteRequerido = m;
 		this.montanteAdquirido = 0;
 		this.financiamento = false;
-		Servidor.CODIGO++;
+		Kickstarter.CODIGO++;
 	}
 
 	public Projecto(Projecto p) {
@@ -41,6 +43,10 @@ public class Projecto {
 
 	public int getCodigo() {
 		return this.codigo;
+	}
+	
+	public Utilizador getUtilizador() {
+		return this.user;
 	}
 
 	public String getNome() {
@@ -95,6 +101,13 @@ public class Projecto {
 			Projecto p = (Projecto) o;
 			return (this.getCodigo() == p.getCodigo());	
 		}
+	}
+
+	public synchronized void ajudarFinanciamento(String nick, double montante) {
+		//this.ofertas.put(key, value)
+		this.montanteRequerido += montante;
+		
+		notifyAll();
 	}
 }
 
