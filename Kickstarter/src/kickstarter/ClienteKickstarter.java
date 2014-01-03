@@ -17,6 +17,8 @@ public class ClienteKickstarter {
     public static Pacote p = null;
     public static ObjectOutputStream o = null;
     
+    public static String nick = null; 
+    
     
     
     public static void main(String args[]) throws IOException {
@@ -67,8 +69,10 @@ public class ClienteKickstarter {
             		BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
                     String result = sktInput.readLine();
                     
-                    if(result.equals("Entrou"))
+                    if(result.equals("Entrou")) {
                     	menuPrincipal();
+                        nick = user;
+                    }
                     else
                     	System.err.println("Autenticação falhada");
         		}

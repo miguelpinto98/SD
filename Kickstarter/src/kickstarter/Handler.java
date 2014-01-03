@@ -39,7 +39,7 @@ public class Handler extends Thread {
 				Pacote pacote = (Pacote) sInput.readObject();
 
 				if (pacote.getAccao().equals(ServidorKickstarter.REGISTAR)) {
-					System.err.println("Recebeu pacote Registar"+"[2J");
+					System.err.println("Recebeu pacote Registar");
 					String nick = pacote.getArgumentos().get(ServidorKickstarter.NOME_USER);
 					String pw = pacote.getArgumentos().get(ServidorKickstarter.PW_USER);
 
@@ -67,6 +67,25 @@ public class Handler extends Thread {
 							sOutput.println("Entrou");
 						sOutput.flush();
 					}
+                    else {
+                        if (pacote.getAccao().equals(ServidorKickstarter.CRIAR_PROJETO)){
+                            System.err.println("Pacote CriarProjeto");
+                            String nome = pacote.getArgumentos().get(ServidorKickstarter.NOME_PROJETO);
+                            String desc = pacote.getArgumentos().get(ServidorKickstarter.DESC_PROJETO);
+                            String montante = pacote.getArgumentos().get(ServidorKickstarter.MONTANTE_PROJETO);
+                            String nick = pacote.getArgumentos().get(ServidorKickstarter.NOME_USER); 
+                            
+                            boolean existe = sk.novoProjeto(sk.getUtilizadores().get(nick),nome, desc, Double.parseDouble(montante));
+                            System.out.println(existe);
+						
+                            if(existe)
+                                sOutput.println("Projecto criado com sucesso");
+                            else 
+                                sOutput.println("Projeto nao criado");
+						
+                            sOutput.flush();
+                        }
+                    }
 				}
 			} while (true);
 		} catch (Exception e) {

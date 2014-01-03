@@ -18,11 +18,15 @@ import java.util.TreeSet;
 public class ServidorKickstarter { 
 	public static int CODIGO=1;
     public static int PORTA=9999;
-    public static String REGISTAR = "RegistarUser";
-    public static String NOME_USER = "NomeUser";
-    public static String PW_USER = "PwUser";
+    public static final String REGISTAR = "RegistarUser";
+    public static final String NOME_USER = "NomeUser";
+    public static final String PW_USER = "PwUser";
     public static final String ENTRAR = "Entrar";
-
+    public static final String CRIAR_PROJETO = "CriarProjeto";
+    public static final String NOME_PROJETO = "NomeProjeto";
+    public static final String DESC_PROJETO = "DescricaoProjeto";
+    public static final String MONTANTE_PROJETO = "MontantePRojeto";
+   
     private static Kickstarter k = null;
 	
     public static void main(String args[]) throws IOException, ClassNotFoundException {
