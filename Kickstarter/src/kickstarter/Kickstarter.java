@@ -64,7 +64,6 @@ public class Kickstarter {
 		if (!this.projectos.containsKey(p.getCodigo())) {
 			this.projectos.put(p.getCodigo(), p);
 			res = true;
-			wait();
 		}
 		return res;
 	}

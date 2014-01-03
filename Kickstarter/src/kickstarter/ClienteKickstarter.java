@@ -13,12 +13,14 @@ public class ClienteKickstarter {
     private static String ip = "localhost";
     private static int port = 9999;
     private static Socket s = null;
-    private static String userAtivo = null;
     
     public static Scanner in = new Scanner(System.in);
     public static HashMap<String, String> hash = new HashMap<>();
     public static Pacote p = null;
     public static ObjectOutputStream o = null;
+    
+    public static String nick = null; 
+    
     public static ObjectInputStream i = null;
     
     public static void main(String args[]) throws IOException {
@@ -69,8 +71,10 @@ public class ClienteKickstarter {
             		BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
                     String result = sktInput.readLine();
                     
-                    if(result.equals("Entrou"))
+                    if(result.equals("Entrou")) {
                     	menuPrincipal();
+                        nick = user;
+                    }
                     else
                     	System.err.println("Autenticação falhada");
         		}
@@ -110,7 +114,7 @@ public class ClienteKickstarter {
     		if(opt == 6)
     			System.exit(0);
     		else
-    			System.out.println("Opão inválida");	
+    			System.out.println("Opcão inválida");	
     	} while(opt<6);
     }
     
@@ -122,9 +126,19 @@ public class ClienteKickstarter {
 		
 	}
 
-	private static void MenuListaProjetosNaoFinanciados() {
-		// TODO Auto-generated method stub
-		
+	private static void MenuListaProjetosNaoFinanciados() throws IOException {
+		in.nextLine();
+        System.out.println("Descrição:");
+        String desc = in.next();
+        
+        hash = new HashMap<>();
+        hash.put(ServidorKickstarter.DESC_PROJETO, desc);
+        p = new Pacote(ServidorKickstarter.REGISTAR,hash);
+                
+        criarObjeto(p);
+                
+        BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
+        System.out.println(sktInput.readLine());
 	}
 
 	private static void MenuFinanciarProjeto() throws IOException {
@@ -135,7 +149,7 @@ public class ClienteKickstarter {
 		double montante = in.nextDouble();
 		
 		hash = new HashMap<>();
-		hash.put(ServidorKickstarter.NOME_USER, userAtivo);
+		hash.put(ServidorKickstarter.NOME_USER, nick);
 		hash.put(ServidorKickstarter.ID, Integer.toString(id));
 		hash.put(ServidorKickstarter.MONTANTE, Double.toString(montante));
 		p = new Pacote(ServidorKickstarter.FINANCIAR, hash);
@@ -143,7 +157,32 @@ public class ClienteKickstarter {
 		criarObjeto(p);	
 	}
 
-	private static void MenuCriarProjeto() {
+	private static void MenuCriarProjeto() throws IOException{
+        in.nextLine();
+        String user = nick;
+        System.out.println("Nome projeto");
+        String nomeProjeto = in.next();
+        System.out.println("Descrição projeto");
+        String descProjeto = in.next();
+        System.out.println("Montante necessário para o projeto");
+        String montanteProjeto = in.next();
+                    
+        hash = new HashMap<>();
+        hash.put(ServidorKickstarter.NOME_USER, nick);
+        hash.put(ServidorKickstarter.NOME_PROJETO, nomeProjeto);
+        hash.put(ServidorKickstarter.DESC_PROJETO, descProjeto);
+        hash.put(ServidorKickstarter.MONTANTE_PROJETO,montanteProjeto);
+                    
+        p = new Pacote(ServidorKickstarter.CRIAR_PROJETO,hash);
+                    
+        o = new ObjectOutputStream(s.getOutputStream());
+        o.writeObject(p);
+        o.flush();
+                    
+        BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
+        System.out.println(sktInput.readLine());
+        
+        menuPrincipal();
 	}
 
 	public static int menuInicial() {
