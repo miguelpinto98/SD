@@ -35,14 +35,14 @@ public class ClienteKickstarter {
     }
     
     public static void menuOriginal() throws IOException, ClassNotFoundException {
-        int opt;
+        String opt;
         
     	do {
         	opt = menuInicial();
             hash = null;
             o = null;
         	
-        	if(opt==1) {
+        	if(opt.equals("1")) {
         		System.out.println("#################### Novo Utilizador #####################");
         		System.out.println("#                                                        #");
         		in.nextLine();
@@ -61,9 +61,9 @@ public class ClienteKickstarter {
                 o.flush();
                 
         		BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
-        		System.out.println("#   "+sktInput.readLine());
+        		System.out.println("\n"+sktInput.readLine()+"\n");
         	} else {
-        		if(opt == 2) {
+        		if(opt.equals("2")) {
             		System.out.println("######################## Entrar ##########################");
             		System.out.println("#                                                        #");
         			in.nextLine();
@@ -98,7 +98,7 @@ public class ClienteKickstarter {
                     }
                 }
         		else {
-        			if(opt == 3) {
+        			if(opt.equals("2")) {
         				System.exit(0);
         			}
         			else
@@ -106,7 +106,7 @@ public class ClienteKickstarter {
         		}
         	}
         		
-        } while(opt<4 || opt>3);
+        } while(true);
     }
     
     public static void menuPrincipal() throws IOException, ClassNotFoundException {
@@ -123,24 +123,27 @@ public class ClienteKickstarter {
 		System.out.println("#                                                        #");
 		System.out.println("#   Escolha uma opção                                    #");
 		System.out.println("##########################################################");
-    	int opt = in.nextInt();
+    	String opt = in.next();
    	
     	do {
-    		if(opt == 1 )
+    		if(opt.equals("1"))
     			MenuCriarProjeto();
-    		if(opt == 2)
+    		if(opt.equals("2"))
     			MenuFinanciarProjeto();
-    		if(opt == 3)
+    		if(opt.equals("3"))
     			MenuListaProjetosNaoFinanciados();
-    		if(opt == 4)
+    		if(opt.equals("4"))
     			MenuListaProjetosGarantidos();
-    		if(opt == 5)
+    		if(opt.equals("5"))
     			MenuInformacoesProjeto();
-    		if(opt == 6) {
+    		if(opt.equals("6")) {
     			logout();
-    		} else
-    			System.out.println("Opcão inválida");	
-    	} while(opt<6);
+    		} else {
+    			System.out.println("Opcão inválida!");
+                menuPrincipal();
+            }
+                
+    	} while(!(opt.equals("1") || opt.equals("2") || opt.equals("3") || opt.equals("4") || opt.equals("5") || opt.equals("6")));
     }
     
     private static void logout() throws IOException, ClassNotFoundException {
@@ -159,8 +162,16 @@ public class ClienteKickstarter {
 		System.out.println("#                                                        #");
     	System.out.println("#   Insira o código do projeto                           #");
     	String id = in.next();
+        if(!eNumero(id)) {
+			System.out.println("\nPor favor insira um número\n");
+            MenuInformacoesProjeto();
+        }
     	System.out.println("#   Insira o número de contribuidores visíveis           #");
     	String n = in.next();
+        if(!eNumero(id)) {
+			System.out.println("\nPor favor insira um número\n");
+            MenuInformacoesProjeto();
+        }
     	
     	hash = new HashMap<>();
     	hash.put(ServidorKickstarter.ID, id);
@@ -191,7 +202,7 @@ public class ClienteKickstarter {
 				}			
 			}
 		} else {
-			System.out.println("#   O código do projeto inserido não existe");
+			System.out.println("\nO código do projeto inserido não existe\n");
 		}
 		System.out.println("#                                                        #");
 		System.out.println("##########################################################");
@@ -202,7 +213,7 @@ public class ClienteKickstarter {
 		in.nextLine();
 		System.out.println("############ Projetos Financiamento Garantido ############");
 		System.out.println("#                                                        #");
-        System.out.println("#   Palavra chave para pesquisa                          #");
+        System.out.println("#   Palavra-chave para pesquisa                          #");
         String desc = in.next();
         
         hash = new HashMap<>();
@@ -218,7 +229,7 @@ public class ClienteKickstarter {
     		for(Projecto pr : projs)
     			System.out.println("#   Código: "+pr.getCodigo()+"\n#   Nome Projeto: "+pr.getNome()+"\n#   Descrição: "+pr.getDescricao()+"\n#   ");
     	} else
-			System.out.println("#   Pesquisa inválida                                    #");
+			System.out.println("\nPesquisa não encontrada\n");
 
 		System.out.println("#                                                        #");
 		System.out.println("##########################################################");
@@ -229,7 +240,7 @@ public class ClienteKickstarter {
 		in.nextLine();
 		System.out.println("################ Projetos Não Financiados ################");
 		System.out.println("#                                                        #");
-        System.out.println("#   Palavra chave para pesquisa                          #");
+        System.out.println("#   Palavra-chave para pesquisa                          #");
         String desc = in.next();
         
         hash = new HashMap<>();
@@ -245,7 +256,7 @@ public class ClienteKickstarter {
 	    	for(Projecto pr : projs)
 	    		System.out.println("#   Código: "+pr.getCodigo()+"\n#   Nome Projeto: "+pr.getNome()+"\n#   Descrição: "+pr.getDescricao()+"\n#   ");
 		} else
-			System.out.println("#   Pesquisa inválida                                    #");
+			System.out.println("\nPesquisa inválida\n");
 
 		System.out.println("#                                                        #");
 		System.out.println("##########################################################");
@@ -257,14 +268,22 @@ public class ClienteKickstarter {
 		System.out.println("#                                                        #");
 		in.nextLine();
 		System.out.println("#   Insira o código do projeto a financiar               #");
-		int id = in.nextInt();
+		String id = in.next();
+        if(!eNumero(id)) {
+			System.out.println("\nPor favor insira um número\n");
+            MenuFinanciarProjeto();
+        }
 		System.out.println("#   Insira montante de financiamento ao projeto          #");
-		double montante = in.nextDouble();
+		String montante = in.next();
+        if(!eNumero(montante)) {
+			System.out.println("\nPor favor insira um número\n");
+            MenuFinanciarProjeto();
+        }
 		
 		hash = new HashMap<>();
 		hash.put(ServidorKickstarter.NOME_USER, nick);
-		hash.put(ServidorKickstarter.ID, Integer.toString(id));
-		hash.put(ServidorKickstarter.MONTANTE, Double.toString(montante));
+		hash.put(ServidorKickstarter.ID, id);
+		hash.put(ServidorKickstarter.MONTANTE, montante);
 		p = new Pacote(ServidorKickstarter.FINANCIAR, hash);
 		
 		criarObjeto(p);
@@ -288,6 +307,11 @@ public class ClienteKickstarter {
         String descProjeto = in.nextLine();
         System.out.println("#   Montante necessário para iniciar projeto             #");
         String montanteProjeto = in.next();
+        if(!eNumero(montanteProjeto)) {
+			System.out.println("\nPor favor insira um número\n");
+            MenuCriarProjeto();
+        }
+        
                     
         hash = new HashMap<>();
         hash.put(ServidorKickstarter.NOME_USER, nick);
@@ -311,7 +335,7 @@ public class ClienteKickstarter {
         menuPrincipal();
 	}
 
-	public static int menuInicial() {
+	public static String menuInicial() {
 		System.out.println("###################### µKickstarter ######################");
 		System.out.println("#                                                        #");
     	System.out.println("#   1 - Registar                                         #");
@@ -320,8 +344,11 @@ public class ClienteKickstarter {
 		System.out.println("#                                                        #");
 		System.out.println("#   Escolha uma opção:                                   #");
 		System.out.println("##########################################################");
-
-        return in.nextInt();    
+        String opt = in.next();
+        if ( !(opt.equals("1") || opt.equals("2") || opt.equals("3")) )
+             opt = menuInicial();
+        
+        return opt ;    
     }
 	
 	public static void criarObjeto(Pacote p) throws IOException {
@@ -330,4 +357,18 @@ public class ClienteKickstarter {
         o.writeObject(p);
         o.flush();
 	}
+    
+  public static boolean eNumero(String s) {
+    boolean res = true;
+    
+    for(int i = 0; i < s.length(); i++){
+        Character caractere = s.charAt(i);
+        if(!Character.isDigit(caractere)){
+            res = false;
+            break;
+        }
+    }
+   
+    return res;
+    }
 }
