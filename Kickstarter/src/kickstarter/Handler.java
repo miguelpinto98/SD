@@ -53,7 +53,10 @@ public class Handler extends Thread {
 						String nick = pacote.getArgumentos().get(ServidorKickstarter.NOME_USER);
 						String pw = pacote.getArgumentos().get(ServidorKickstarter.PW_USER);
 
-						boolean emSessao =  sk.getUtilizadores().get(nick).isAtivo();
+						boolean emSessao = false;
+						if(sk.getUtilizadores().containsKey(nick))
+							emSessao =  sk.getUtilizadores().get(nick).isAtivo();
+						
 						System.out.println(nick + pw);
 						boolean existe = sk.validaUser(nick, pw);
 						System.out.println(existe);
@@ -104,12 +107,16 @@ public class Handler extends Thread {
                         			System.out.println(id);
                         			System.out.println(montante);
                         			
-                        			boolean res = sk.ajudarProjeto(user, id, montante);
-                        			System.out.println("Financiado?"+res);
-                        			if(res)
-                        				sOutput.println("Financiado com sucesso");
-                        			else
-                        				sOutput.println("Projeto já tem financiamento assegurado");
+                        			if(sk.getProjectos().containsKey(id)) {
+                        				boolean res = sk.ajudarProjeto(user, id, montante);
+	                        			System.out.println("Financiado?"+res);
+	                        			if(res)
+	                        				sOutput.println("Financiado com sucesso");
+	                        			else
+	                        				sOutput.println("Projeto já tem financiamento assegurado");
+	                        		} else {
+	                        			sOutput.println("#   O código do projeto inserido não existe");
+	                        		}
                         			sOutput.flush();
                         		} else {
                         			if(pacote.getAccao().equals(ServidorKickstarter.PROJ_FINANCIADOS)) {

@@ -29,9 +29,15 @@ public class ClienteKickstarter {
     
     public static void main(String args[]) throws IOException, ClassNotFoundException {
         s = new Socket(ip,port);
+        
+       menuOriginal();
+
+    }
+    
+    public static void menuOriginal() throws IOException, ClassNotFoundException {
         int opt;
         
-        do {
+    	do {
         	opt = menuInicial();
             hash = null;
             o = null;
@@ -101,7 +107,6 @@ public class ClienteKickstarter {
         	}
         		
         } while(opt<4 || opt>3);
-
     }
     
     public static void menuPrincipal() throws IOException, ClassNotFoundException {
@@ -132,16 +137,20 @@ public class ClienteKickstarter {
     		if(opt == 5)
     			MenuInformacoesProjeto();
     		if(opt == 6) {
-    			hash = new HashMap<>();
-                hash.put(ServidorKickstarter.NOME_USER, nick);
-                p = new Pacote(ServidorKickstarter.SAIR,hash);
-                criarObjeto(p);
-                
-                nick = null;
-                menuInicial();
+    			logout();
     		} else
     			System.out.println("Opcão inválida");	
     	} while(opt<6);
+    }
+    
+    private static void logout() throws IOException, ClassNotFoundException {
+    	hash = new HashMap<>();
+        hash.put(ServidorKickstarter.NOME_USER, nick);
+        p = new Pacote(ServidorKickstarter.SAIR,hash);
+        criarObjeto(p);
+        
+        nick = null;
+        menuOriginal();
     }
     
     private static void MenuInformacoesProjeto() throws IOException, ClassNotFoundException {
@@ -163,24 +172,27 @@ public class ClienteKickstarter {
     	i = new ObjectInputStream(s.getInputStream());
 		Projecto proj = (Projecto) i.readObject();
     	
-    	System.out.println(proj.toString());
-    	
-    	int nn = Integer.parseInt(n);
-    	if(nn == 0 || nn > proj.getOfertas().size()) {
-    		System.out.println("#   Financiado por                                       #");
-    		for(Oferta o : proj.getOfertas())
-    			System.out.println("#   Utilizador "+o.getNick() + " com " + o.getDoado());
-    	} else {
-    		System.out.println("#   Financiado por                                       #");
-			Iterator<Oferta> it = proj.getOfertas().iterator();
-			int i=0;
-			while(it.hasNext() && i<nn) {
-				Oferta o = it.next();
-				System.out.println("#   Utilizador: "+o.getNick() + " com "+o.getDoado());	
-				i++;
+		if(proj != null) {
+			System.out.println(proj.toString());
+
+			int nn = Integer.parseInt(n);
+			if(nn == 0 || nn > proj.getOfertas().size()) {
+				System.out.println("#   Financiado por                                       #");
+				for(Oferta o : proj.getOfertas())
+					System.out.println("#   Utilizador "+o.getNick() + " com " + o.getDoado());
+			} else {
+				System.out.println("#   Financiado por                                       #");
+				Iterator<Oferta> it = proj.getOfertas().iterator();
+				int i=0;
+				while(it.hasNext() && i<nn) {
+					Oferta o = it.next();
+					System.out.println("#   Utilizador: "+o.getNick() + " com "+o.getDoado());	
+					i++;
+				}			
 			}
-				
-    	} 
+		} else {
+			System.out.println("#   O código do projeto inserido não existe");
+		}
 		System.out.println("#                                                        #");
 		System.out.println("##########################################################");
     	menuPrincipal();
@@ -202,9 +214,11 @@ public class ClienteKickstarter {
         i = new ObjectInputStream(s.getInputStream());
     	@SuppressWarnings("unchecked")
 		HashSet<Projecto> projs = (HashSet<Projecto>) i.readObject();
-    	
-    	for(Projecto pr : projs)
-    		System.out.println("#   Código: "+pr.getCodigo()+"\n#   Nome Projeto: "+pr.getNome()+"\n#   Descrição: "+pr.getDescricao()+"\n#   ");
+    	if(!projs.isEmpty()) {
+    		for(Projecto pr : projs)
+    			System.out.println("#   Código: "+pr.getCodigo()+"\n#   Nome Projeto: "+pr.getNome()+"\n#   Descrição: "+pr.getDescricao()+"\n#   ");
+    	} else
+			System.out.println("#   Pesquisa inválida                                    #");
 
 		System.out.println("#                                                        #");
 		System.out.println("##########################################################");
@@ -227,9 +241,12 @@ public class ClienteKickstarter {
         i = new ObjectInputStream(s.getInputStream());
 		HashSet<Projecto> projs = (HashSet<Projecto>) i.readObject();
     	
-    	for(Projecto pr : projs)
-    		System.out.println("#   Código: "+pr.getCodigo()+"\n#   Nome Projeto: "+pr.getNome()+"\n#   Descrição: "+pr.getDescricao()+"\n#   ");
-    	
+		if(!projs.isEmpty()) {
+	    	for(Projecto pr : projs)
+	    		System.out.println("#   Código: "+pr.getCodigo()+"\n#   Nome Projeto: "+pr.getNome()+"\n#   Descrição: "+pr.getDescricao()+"\n#   ");
+		} else
+			System.out.println("#   Pesquisa inválida                                    #");
+
 		System.out.println("#                                                        #");
 		System.out.println("##########################################################");
     	menuPrincipal();
