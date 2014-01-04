@@ -69,9 +69,9 @@ public class Kickstarter {
 		return res;
 	}
 
-	public void ajudarProjeto(String nick, int idproj, double montante) {
+	public boolean ajudarProjeto(String nick, int idproj, double montante) {
 		synchronized (this.projectos.get(idproj)) {
-			this.projectos.get(idproj).ajudarFinanciamento(nick, montante);
+			return this.projectos.get(idproj).ajudarFinanciamento(nick, montante);
 		}
 	}
 

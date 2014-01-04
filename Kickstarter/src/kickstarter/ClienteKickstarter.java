@@ -7,6 +7,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.NavigableSet;
 import java.util.Scanner;
 import java.util.TreeSet;
 
@@ -137,25 +140,31 @@ public class ClienteKickstarter {
     	criarObjeto(p);
     	
     	i = new ObjectInputStream(s.getInputStream());
-    	@SuppressWarnings("unchecked")
 		Projecto proj = (Projecto) i.readObject();
     	
-    	System.out.println(proj.getCodigo());
-    	System.out.println(proj.getNome());
-    	System.out.println(proj.getDescricao());
-    	System.out.println(proj.getMontanteRequerido());
-    	System.out.println(proj.getMontanteAdquirido());
-    	System.out.println(proj.getUtilizador());
+    	System.out.println(proj.toString());
     	
-    	for(Oferta o : proj.getOfertas())
-    		System.out.println(o.getNick() + " - " + o.getDoado());
+    	int nn = Integer.parseInt(n);
+    	if(nn == 0 || nn > proj.getOfertas().size()) {
+    		for(Oferta o : proj.getOfertas())
+    			System.out.println(o.getNick() + " - " + o.getDoado());
+    	} else {
+			Iterator<Oferta> it = proj.getOfertas().iterator();
+			int i=0;
+			while(it.hasNext() && i<nn) {
+				Oferta o = it.next();
+				System.out.println("Utilizador: "+o.getNick() + " Montante: "+o.getDoado());	
+				i++;
+			}
+				
+    	} 
     	
     	menuPrincipal();
 	}
 
-	private static void MenuListaProjetosGarantidos() throws IOException {
+	private static void MenuListaProjetosGarantidos() throws IOException, ClassNotFoundException {
 		in.nextLine();
-        System.out.println("Descrição:");
+        System.out.println("Palavra chave: ");
         String desc = in.next();
         
         hash = new HashMap<>();
@@ -164,14 +173,19 @@ public class ClienteKickstarter {
                 
         criarObjeto(p);
                 
-        BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
-        System.out.println(sktInput.readLine());
-		
+        i = new ObjectInputStream(s.getInputStream());
+    	@SuppressWarnings("unchecked")
+		HashSet<Projecto> projs = (HashSet<Projecto>) i.readObject();
+    	
+    	for(Projecto pr : projs)
+    		System.out.println("ID: "+pr.getCodigo()+" Nome Projeto: "+pr.getNome()+" Descrição: "+pr.getDescricao());
+	
+    	menuPrincipal();
 	}
 
-	private static void MenuListaProjetosNaoFinanciados() throws IOException {
+	private static void MenuListaProjetosNaoFinanciados() throws IOException, ClassNotFoundException {
 		in.nextLine();
-        System.out.println("Descrição:");
+        System.out.println("Palavra chave: ");
         String desc = in.next();
         
         hash = new HashMap<>();
@@ -180,11 +194,17 @@ public class ClienteKickstarter {
                 
         criarObjeto(p);
                 
-        BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
-        System.out.println(sktInput.readLine());
+        i = new ObjectInputStream(s.getInputStream());
+    	@SuppressWarnings("unchecked")
+		HashSet<Projecto> projs = (HashSet<Projecto>) i.readObject();
+    	
+    	for(Projecto pr : projs)
+    		System.out.println("ID: "+pr.getCodigo()+" Nome Projeto: "+pr.getNome()+" Descrição: "+pr.getDescricao());
+    	
+    	menuPrincipal();
 	}
 
-	private static void MenuFinanciarProjeto() throws IOException {
+	private static void MenuFinanciarProjeto() throws IOException, ClassNotFoundException {
 		in.nextLine();
 		System.out.println("Insira o id do projeto a financiar: ");
 		int id = in.nextInt();
@@ -199,15 +219,18 @@ public class ClienteKickstarter {
 		
 		criarObjeto(p);
 		
-		//Falta receber objeto de lá
+		BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
+        System.out.println(sktInput.readLine());
+		
+		menuPrincipal();
 	}
 
 	private static void MenuCriarProjeto() throws IOException, ClassNotFoundException{
         in.nextLine();
         System.out.println("Nome projeto");
-        String nomeProjeto = in.next();
+        String nomeProjeto = in.nextLine();
         System.out.println("Descrição projeto");
-        String descProjeto = in.next();
+        String descProjeto = in.nextLine();
         System.out.println("Montante necessário para o projeto");
         String montanteProjeto = in.next();
                     

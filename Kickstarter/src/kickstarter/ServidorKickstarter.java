@@ -37,9 +37,10 @@ public class ServidorKickstarter {
         
         k.registaUtilizador("abc", "123");
         k.registaUtilizador("aaa", "111");
-        k.novoProjeto("Arroz", "Com Pão", 123, "abc");
+        k.novoProjeto("Arroz", "Com Pão", 232, "abc");
         k.ajudarProjeto("aaa", 1, 100);
         k.ajudarProjeto("asd", 1, 20);
+        k.ajudarProjeto("aaa", 1, 50);
         
         System.out.println(k.getProjectos().get(1).toString());
         

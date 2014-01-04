@@ -77,10 +77,13 @@ public class Handler extends Thread {
                                 System.err.println("Pacote Lista Nao Financiados");
                                 String desc = pacote.getArgumentos().get(ServidorKickstarter.DESC_PROJETO);
                                 System.out.println(desc);
-                                HashSet<Projecto> projetos = sk.devolveProjetosAtivos(desc);
                                 
-                                sOutput.println(projetos); //FALTA "LEVAR" O OBJECTO
-                                sOutput.flush();
+                                HashSet<Projecto> res = sk.devolveProjetosAtivos(desc);
+                                
+                                ObjectOutputStream out = null;
+                				out = new ObjectOutputStream(s.getOutputStream());
+                				out.writeObject(res);
+                				out.flush();
                             }
                         	else {
                         		if(pacote.getAccao().equals(ServidorKickstarter.FINANCIAR)) {
@@ -91,14 +94,29 @@ public class Handler extends Thread {
                         			
                         			int id = Integer.parseInt(sid);
                         			double montante = Double.parseDouble(smon);
-                        			sk.ajudarProjeto(user, id, montante);
+                        			
+                        			System.out.println(id);
+                        			System.out.println(montante);
+                        			
+                        			boolean res = sk.ajudarProjeto(user, id, montante);
+                        			System.out.println("Financiado?"+res);
+                        			if(res)
+                        				sOutput.println("Financiado com sucesso");
+                        			else
+                        				sOutput.println("Projeto já tem financiamento assegurado");
+                        			sOutput.flush();
                         		} else {
                         			if(pacote.getAccao().equals(ServidorKickstarter.PROJ_FINANCIADOS)) {
                         				System.err.println("Pacote Listar Projetos Financiados");
                         				String desc = pacote.getArgumentos().get(ServidorKickstarter.DESC_PROJETO);
                         				System.out.println(desc);
                         				
-                        				HashSet<Projecto> res = sk.devolveProjetoTerminado(desc);	
+                        				HashSet<Projecto> res = sk.devolveProjetoTerminado(desc);
+                        				
+                        				ObjectOutputStream out = null;
+                        				out = new ObjectOutputStream(s.getOutputStream());
+                        				out.writeObject(res);
+                        				out.flush();
                         			}
                         			else {
                         				System.err.println("Pacote Informações Projeto");

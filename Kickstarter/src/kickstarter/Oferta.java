@@ -47,9 +47,6 @@ public class Oferta implements Comparable<Oferta>, Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Oferta other = (Oferta) obj;
-		if (Double.doubleToLongBits(doado) != Double
-				.doubleToLongBits(other.doado))
-			return false;
 		if (nick == null) {
 			if (other.nick != null)
 				return false;

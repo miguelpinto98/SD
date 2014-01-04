@@ -1,6 +1,7 @@
 package kickstarter;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.TreeSet;
 
 public class Projecto implements Serializable{
@@ -95,14 +96,12 @@ public class Projecto implements Serializable{
 	public String toString() {
 		StringBuilder s = new StringBuilder("***Projecto***\n");
 		s.append("Código: " + this.getCodigo());
-		s.append("Nome: " + this.getNome());	
-		s.append("Descricao: " + this.getDescricao());	
-		s.append("Montante Requerido: " + this.getMontanteRequerido());
-		s.append("Montante já Adquirido: " + this.getMontanteAdquirido());        
-		s.append("Financiamento Assegurado: " + this.isTerminado());
-		s.append("\n OFERTAS \n");
-		for(Oferta o : this.ofertas)
-			s.append(o.getDoado()+o.getNick());
+		s.append("\nProjeto de :" +this.getUtilizador());
+		s.append("\nNome: " + this.getNome());	
+		s.append("\nDescricao: " + this.getDescricao());	
+		s.append("\nMontante Requerido: " + this.getMontanteRequerido());
+		s.append("\nMontante já Adquirido: " + this.getMontanteAdquirido());        
+		s.append("\nFinanciamento Assegurado: " + this.isTerminado());
 		
 		return s.toString();
 	}
@@ -118,23 +117,32 @@ public class Projecto implements Serializable{
 		}
 	}
 
-	public synchronized void ajudarFinanciamento(String nick, double montante) {
-		this.montanteAdquirido += montante;
+	public synchronized boolean ajudarFinanciamento(String nick, double montante) {
+		boolean res = false, encontrou = false;
+		Oferta of = null;
 		
-		if(this.ofertas.isEmpty()) {
-			this.ofertas.add(new Oferta(nick, montante));
-		} else {
-			for(Oferta o : this.ofertas) {
-				if(o.getNick().equals(nick)) {
-					double ant = o.getDoado();
-					this.ofertas.remove(o);
-					this.ofertas.add(new Oferta(nick, ant+montante));
+		if(!this.isTerminado()) {
+			this.montanteAdquirido += montante;
+			
+			if(this.ofertas.isEmpty()) {
+				this.ofertas.add(new Oferta(nick, montante));
+			} else {
+				Iterator<Oferta> it =this.ofertas.iterator();
+				while(it.hasNext() && !encontrou) {
+					if((of = it.next()).getNick().equals(nick))
+						encontrou=true;
 				}
-				else
-					this.ofertas.add(new Oferta(nick,montante));				
+				if(encontrou) {
+					this.ofertas.remove(of);
+					this.ofertas.add(new Oferta(nick, of.getDoado()+montante));
+				} else {
+					this.ofertas.add(new Oferta(nick, montante));
+				}
 			}
+			res = true;
 		}
 		//notifyAll();
+		return res;
 	}
 }
 
