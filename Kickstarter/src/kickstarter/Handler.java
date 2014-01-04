@@ -19,6 +19,10 @@ public class Handler extends Thread {
         this.sInput = null;
         this.sOutput = null;
     }
+	
+	public PrintWriter getSOutPut() {
+		return this.sOutput;
+	}
 
 	public void run() {		
 		try {
@@ -49,12 +53,14 @@ public class Handler extends Thread {
 						String nick = pacote.getArgumentos().get(ServidorKickstarter.NOME_USER);
 						String pw = pacote.getArgumentos().get(ServidorKickstarter.PW_USER);
 
+						boolean emSessao =  sk.getUtilizadores().get(nick).isAtivo();
 						System.out.println(nick + pw);
 						boolean existe = sk.validaUser(nick, pw);
 						System.out.println(existe);
 						
-						if(existe)
+						if(existe && !emSessao)
 							sOutput.println("Entrou");
+						else sOutput.println("NaoEntrou");
 						sOutput.flush();
 					} else {
                         if (pacote.getAccao().equals(ServidorKickstarter.CRIAR_PROJETO)){
@@ -64,7 +70,7 @@ public class Handler extends Thread {
                             String montante = pacote.getArgumentos().get(ServidorKickstarter.MONTANTE_PROJETO);
                             String nick = pacote.getArgumentos().get(ServidorKickstarter.NOME_USER); 
                             
-                            int id = sk.novoProjeto(nome, desc, Double.parseDouble(montante), nick);
+                            int id = sk.novoProjeto(this,nome, desc, Double.parseDouble(montante), nick);
 						
                             if(id != -1)
                                 sOutput.println("Projecto criado com sucesso com o código "+id);

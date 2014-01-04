@@ -1,5 +1,6 @@
 package kickstarter;
 
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -56,23 +57,40 @@ public class Kickstarter {
 		return res;
 	}
 
-	public synchronized int novoProjeto(String nProj, String desc, double montante, String u) throws InterruptedException {
+	public synchronized int novoProjeto(Handler h,String nProj, String desc, double montante, String u) throws InterruptedException {
 		int res = -1;
 		Projecto p = new Projecto(nProj, desc, montante, u);
 
 		if (!this.projectos.containsKey(p.getCodigo())) {
 			this.projectos.put(p.getCodigo(), p);
-			System.out.println(p.getCodigo());
 			res = p.getCodigo();
 			
+			System.out.println("entrou no wait");
+			while(!p.isTerminado()) {
+				this.wait();
+				for(Oferta o : p.getOfertas()) {
+					if(o.getLida()==false) {
+						h.getSOutPut().println("Recebeu uma oferta " + o.getDoado());
+						h.getSOutPut().flush();
+						o.setLida(true);
+					}
+				}
+			}
+			System.out.println("saiu wait");
 		}
 		return res;
-	}
+	}		
 
-	public boolean ajudarProjeto(String nick, int idproj, double montante) {
-		synchronized (this.projectos.get(idproj)) {
-			return this.projectos.get(idproj).ajudarFinanciamento(nick, montante);
-		}
+	public synchronized boolean ajudarProjeto(String nick, int idproj, double montante) {
+			boolean res = this.projectos.get(idproj).ajudarFinanciamento(nick, montante);
+			
+			if(this.projectos.get(idproj).getMontanteAdquirido() >= this.projectos.get(idproj).getMontanteRequerido()) {
+				this.projectos.get(idproj).setFinanciamento(true);
+			}
+				System.out.println(this.projectos.get(idproj).getMontanteAdquirido());
+				
+				this.notifyAll();
+			return res;
 	}
 
 	public HashSet<Projecto> devolveProjetosAtivos(String desc) {

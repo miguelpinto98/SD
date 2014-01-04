@@ -73,18 +73,21 @@ public class ClienteKickstarter {
                     o.flush();
                     
             		BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
-                    String result = sktInput.readLine();
+                    String result = null;
+                    result=sktInput.readLine();
                     
                     if(result.equals("Entrou")) {
                     	nick = user;
                     	menuPrincipal();
                     }
-                    else
+                    else {
                     	System.err.println("Autenticação falhada");
-        		}
+                    }
+                }
         		else {
         			if(opt == 3) {
         				System.exit(3);
+        				//falta fazer logout();
         				//nick = null;
         			}
         			else
@@ -221,6 +224,7 @@ public class ClienteKickstarter {
 		
 		BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
         System.out.println(sktInput.readLine());
+        
 		
 		menuPrincipal();
 	}
@@ -235,7 +239,6 @@ public class ClienteKickstarter {
         String montanteProjeto = in.next();
                     
         hash = new HashMap<>();
-        System.out.println(nick);
         hash.put(ServidorKickstarter.NOME_USER, nick);
         hash.put(ServidorKickstarter.NOME_PROJETO, nomeProjeto);
         hash.put(ServidorKickstarter.DESC_PROJETO, descProjeto);
@@ -244,9 +247,13 @@ public class ClienteKickstarter {
         p = new Pacote(ServidorKickstarter.CRIAR_PROJETO,hash);
                     
         criarObjeto(p);
-                    
+        
         BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
-        System.out.println(sktInput.readLine());
+        String ss; 
+        do {
+        	ss = sktInput.readLine();
+        	System.out.println(ss);
+        } while(ss.contains("Recebeu"));
         
         menuPrincipal();
 	}

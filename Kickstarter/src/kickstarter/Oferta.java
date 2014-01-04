@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Oferta implements Comparable<Oferta>, Serializable{
 	private String nick;
 	private double doado;
+	private boolean lida;
 	
 	public Oferta() {
 		this.nick = "";
@@ -23,6 +24,14 @@ public class Oferta implements Comparable<Oferta>, Serializable{
 	
 	public String getNick() {
 		return this.nick;
+	}
+	
+	public boolean getLida() {
+		return this.lida;
+	}
+	
+	public void setLida(boolean a) {
+		this.lida = a; 
 	}
 	
 	public double getDoado() {

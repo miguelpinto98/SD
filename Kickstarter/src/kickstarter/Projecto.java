@@ -117,7 +117,7 @@ public class Projecto implements Serializable{
 		}
 	}
 
-	public synchronized boolean ajudarFinanciamento(String nick, double montante) {
+	public boolean ajudarFinanciamento(String nick, double montante) {
 		boolean res = false, encontrou = false;
 		Oferta of = null;
 		
@@ -141,7 +141,8 @@ public class Projecto implements Serializable{
 			}
 			res = true;
 		}
-		//notifyAll();
+	
+		
 		return res;
 	}
 }
