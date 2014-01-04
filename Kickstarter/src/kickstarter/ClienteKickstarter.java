@@ -360,15 +360,25 @@ public class ClienteKickstarter {
     
   public static boolean eNumero(String s) {
     boolean res = true;
-    
+    boolean isDouble = false;  
+    try {  
+       Double.parseDouble(s);  
+       isDouble = true;  
+    } catch (Exception e) {  
+       isDouble = false;  
+    } 
+/*
     for(int i = 0; i < s.length(); i++){
-        Character caractere = s.charAt(i);
-        if(!Character.isDigit(caractere)){
-            res = false;
-            break;
+        char caractere = s.charAt(i);
+        if(caractere == ',') 
+        	i++;
+        else {
+        	if( !Character.isDigit(caractere)) {
+        		res = false;
+        		break;
+        	}
         }
-    }
-   
-    return res;
-    }
+    }*/
+    return isDouble;
+}
 }

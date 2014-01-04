@@ -104,8 +104,8 @@ public class Projecto implements Serializable{
 		s.append("\n#   Projeto de: " +this.getUtilizador());
 		s.append("\n#   Nome: " + this.getNome());	
 		s.append("\n#   Descrição: " + this.getDescricao());	
-		s.append("\n#   Montante requerido: " + this.getMontanteRequerido());
-		s.append("\n#   Montante já adquirido: " + this.getMontanteAdquirido());        
+		s.append("\n#   Montante requerido: " + this.getMontanteRequerido()+"€");
+		s.append("\n#   Montante já adquirido: " + this.getMontanteAdquirido()+"€");        
 		s.append("\n#   Financiamento já assegurado? " + this.isTerminado());
 		
 		return s.toString();
