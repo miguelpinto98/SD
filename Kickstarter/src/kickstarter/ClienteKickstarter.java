@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.TreeSet;
 
 public class ClienteKickstarter {
     private static String ip = "localhost";
@@ -23,7 +24,7 @@ public class ClienteKickstarter {
     
     public static ObjectInputStream i = null;
     
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) throws IOException, ClassNotFoundException {
         s = new Socket(ip,port);
         int opt;
         
@@ -72,8 +73,8 @@ public class ClienteKickstarter {
                     String result = sktInput.readLine();
                     
                     if(result.equals("Entrou")) {
+                    	nick = user;
                     	menuPrincipal();
-                        nick = user;
                     }
                     else
                     	System.err.println("Autenticação falhada");
@@ -81,7 +82,7 @@ public class ClienteKickstarter {
         		else {
         			if(opt == 3) {
         				System.exit(3);
-        				nick = null;
+        				//nick = null;
         			}
         			else
         				System.out.println("Opção inválida!");
@@ -92,7 +93,7 @@ public class ClienteKickstarter {
 
     }
     
-    public static void menuPrincipal() throws IOException {
+    public static void menuPrincipal() throws IOException, ClassNotFoundException {
     	System.out.println(" 1 - Criar projeto");
     	System.out.println(" 2 - Financiar projeto");
     	System.out.println(" 3 - Lista projetos ainda não financiados");
@@ -120,7 +121,7 @@ public class ClienteKickstarter {
     	} while(opt<6);
     }
     
-    private static void MenuInformacoesProjeto() throws IOException {
+    private static void MenuInformacoesProjeto() throws IOException, ClassNotFoundException {
     	in.nextLine();
     	System.out.println("Código projeto");
     	String id = in.next();
@@ -134,6 +135,22 @@ public class ClienteKickstarter {
     	p = new Pacote(ServidorKickstarter.INF_PROJ, hash);
     	
     	criarObjeto(p);
+    	
+    	i = new ObjectInputStream(s.getInputStream());
+    	@SuppressWarnings("unchecked")
+		Projecto proj = (Projecto) i.readObject();
+    	
+    	System.out.println(proj.getCodigo());
+    	System.out.println(proj.getNome());
+    	System.out.println(proj.getDescricao());
+    	System.out.println(proj.getMontanteRequerido());
+    	System.out.println(proj.getMontanteAdquirido());
+    	System.out.println(proj.getUtilizador());
+    	
+    	for(Oferta o : proj.getOfertas())
+    		System.out.println(o.getNick() + " - " + o.getDoado());
+    	
+    	menuPrincipal();
 	}
 
 	private static void MenuListaProjetosGarantidos() throws IOException {
@@ -185,7 +202,7 @@ public class ClienteKickstarter {
 		//Falta receber objeto de lá
 	}
 
-	private static void MenuCriarProjeto() throws IOException{
+	private static void MenuCriarProjeto() throws IOException, ClassNotFoundException{
         in.nextLine();
         System.out.println("Nome projeto");
         String nomeProjeto = in.next();
@@ -195,6 +212,7 @@ public class ClienteKickstarter {
         String montanteProjeto = in.next();
                     
         hash = new HashMap<>();
+        System.out.println(nick);
         hash.put(ServidorKickstarter.NOME_USER, nick);
         hash.put(ServidorKickstarter.NOME_PROJETO, nomeProjeto);
         hash.put(ServidorKickstarter.DESC_PROJETO, descProjeto);
@@ -206,6 +224,8 @@ public class ClienteKickstarter {
                     
         BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
         System.out.println(sktInput.readLine());
+        
+        menuPrincipal();
 	}
 
 	public static int menuInicial() {
@@ -217,6 +237,7 @@ public class ClienteKickstarter {
     }
 	
 	public static void criarObjeto(Pacote p) throws IOException {
+		o = null;
 		o = new ObjectOutputStream(s.getOutputStream());
         o.writeObject(p);
         o.flush();

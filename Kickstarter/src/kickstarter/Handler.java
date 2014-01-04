@@ -1,6 +1,7 @@
 package kickstarter;
 
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashSet;
@@ -63,11 +64,10 @@ public class Handler extends Thread {
                             String montante = pacote.getArgumentos().get(ServidorKickstarter.MONTANTE_PROJETO);
                             String nick = pacote.getArgumentos().get(ServidorKickstarter.NOME_USER); 
                             
-                            boolean existe = sk.novoProjeto(sk.getUtilizadores().get(nick),nome, desc, Double.parseDouble(montante));
-                            System.out.println(existe);
+                            int id = sk.novoProjeto(nome, desc, Double.parseDouble(montante), nick);
 						
-                            if(existe)
-                                sOutput.println("Projecto criado com sucesso");
+                            if(id != -1)
+                                sOutput.println("Projecto criado com sucesso com o código "+id);
                             else 
                                 sOutput.println("Projeto nao criado");
 						
@@ -102,13 +102,17 @@ public class Handler extends Thread {
                         			}
                         			else {
                         				System.err.println("Pacote Informações Projeto");
-                        				
                             			String sid = pacote.getArgumentos().get(ServidorKickstarter.ID);
-                            			String sn = pacote.getArgumentos().get(ServidorKickstarter.NCONTRIBUTOS);
                             			
                             			int id = Integer.parseInt(sid);
-                            			int n = Integer.parseInt(sn);
-                        				TreeSet<Oferta> res = sk.devolveProjectoContribuidores(id, n);
+                            			System.out.println(id);
+                            			
+                        				Projecto res = sk.getProjectos().get(id);
+                        				
+                        				ObjectOutputStream out = null;
+                        				out = new ObjectOutputStream(s.getOutputStream());
+                        				out.writeObject(res);
+                        				out.flush();
                         			}
                         		}
                         	}

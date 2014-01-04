@@ -56,14 +56,15 @@ public class Kickstarter {
 		return res;
 	}
 
-	public synchronized boolean novoProjeto(Utilizador u, String nProj, String desc,
-			double montante) throws InterruptedException {
-		boolean res = false;
+	public synchronized int novoProjeto(String nProj, String desc, double montante, String u) throws InterruptedException {
+		int res = -1;
 		Projecto p = new Projecto(nProj, desc, montante, u);
 
 		if (!this.projectos.containsKey(p.getCodigo())) {
 			this.projectos.put(p.getCodigo(), p);
-			res = true;
+			System.out.println(p.getCodigo());
+			res = p.getCodigo();
+			
 		}
 		return res;
 	}
@@ -71,7 +72,6 @@ public class Kickstarter {
 	public void ajudarProjeto(String nick, int idproj, double montante) {
 		synchronized (this.projectos.get(idproj)) {
 			this.projectos.get(idproj).ajudarFinanciamento(nick, montante);
-
 		}
 	}
 
@@ -99,12 +99,15 @@ public class Kickstarter {
 		TreeSet<Oferta> res = new TreeSet<>();
 		TreeSet<Oferta> ts = this.projectos.get(id).getOfertas();
 		int i = 0;
+		System.out.println(ts.isEmpty());
 
-		Iterator<Oferta> it = ts.iterator();
+		if(!ts.isEmpty()) {
+			Iterator<Oferta> it = ts.iterator();
 
-		while (it.hasNext() && i < n) {
-			res.add(it.next());
-			i++;
+			while (it.hasNext() && i < n) {
+				res.add(it.next());
+				i++;
+			}
 		}
 		return res;
 	}

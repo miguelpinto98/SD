@@ -31,9 +31,17 @@ public class ServidorKickstarter {
 
     private static Kickstarter k = null;
 	
-    public static void main(String args[]) throws IOException, ClassNotFoundException {
+    public static void main(String args[]) throws IOException, ClassNotFoundException, InterruptedException {
         ServerSocket sv = new ServerSocket(PORTA);
         k = new Kickstarter();
+        
+        k.registaUtilizador("abc", "123");
+        k.registaUtilizador("aaa", "111");
+        k.novoProjeto("Arroz", "Com Pão", 123, "abc");
+        k.ajudarProjeto("aaa", 1, 100);
+        k.ajudarProjeto("asd", 1, 20);
+        
+        System.out.println(k.getProjectos().get(1).toString());
         
         while(true) {
             Socket cliente = sv.accept();

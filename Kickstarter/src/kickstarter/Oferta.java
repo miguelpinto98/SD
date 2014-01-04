@@ -1,6 +1,8 @@
 package kickstarter;
 
-public class Oferta implements Comparable<Oferta>{
+import java.io.Serializable;
+
+public class Oferta implements Comparable<Oferta>, Serializable{
 	private String nick;
 	private double doado;
 	
@@ -36,4 +38,24 @@ public class Oferta implements Comparable<Oferta>{
 	public Oferta clone() {
 		return new Oferta(this);
 	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Oferta other = (Oferta) obj;
+		if (Double.doubleToLongBits(doado) != Double
+				.doubleToLongBits(other.doado))
+			return false;
+		if (nick == null) {
+			if (other.nick != null)
+				return false;
+		} else if (!nick.equals(other.nick))
+			return false;
+		return true;
+	}
+	
 }

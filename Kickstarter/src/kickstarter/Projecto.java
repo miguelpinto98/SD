@@ -1,10 +1,11 @@
 package kickstarter;
 
+import java.io.Serializable;
 import java.util.TreeSet;
 
-public class Projecto {
+public class Projecto implements Serializable{
 	private int codigo;
-	private Utilizador user;
+	private String user;
 	private String nome;
 	private String descricao;
 	private double montanteRequerido;
@@ -21,7 +22,7 @@ public class Projecto {
 		this.terminado = false;
 	}
 
-	public Projecto(String n, String d, double m, Utilizador u) {
+	public Projecto(String n, String d, double m, String u) {
 		this.codigo = ServidorKickstarter.CODIGO;
 		this.user = u;
 		this.nome = n;
@@ -29,6 +30,7 @@ public class Projecto {
 		this.montanteRequerido = m;
 		this.montanteAdquirido = 0;
 		this.terminado = false;
+		this.ofertas = new TreeSet<>();
 		ServidorKickstarter.CODIGO++;
 	}
 
@@ -45,7 +47,7 @@ public class Projecto {
 		return this.codigo;
 	}
 	
-	public Utilizador getUtilizador() {
+	public String getUtilizador() {
 		return this.user;
 	}
 
@@ -98,6 +100,10 @@ public class Projecto {
 		s.append("Montante Requerido: " + this.getMontanteRequerido());
 		s.append("Montante já Adquirido: " + this.getMontanteAdquirido());        
 		s.append("Financiamento Assegurado: " + this.isTerminado());
+		s.append("\n OFERTAS \n");
+		for(Oferta o : this.ofertas)
+			s.append(o.getDoado()+o.getNick());
+		
 		return s.toString();
 	}
 
@@ -113,18 +119,22 @@ public class Projecto {
 	}
 
 	public synchronized void ajudarFinanciamento(String nick, double montante) {
-		this.montanteRequerido += montante;
+		this.montanteAdquirido += montante;
 		
-		for(Oferta o : this.ofertas) {
-			if(o.getNick().equals(nick)) {
-				double ant = o.getDoado();
-				this.ofertas.remove(o);
-				this.ofertas.add(new Oferta(nick, ant+montante));
+		if(this.ofertas.isEmpty()) {
+			this.ofertas.add(new Oferta(nick, montante));
+		} else {
+			for(Oferta o : this.ofertas) {
+				if(o.getNick().equals(nick)) {
+					double ant = o.getDoado();
+					this.ofertas.remove(o);
+					this.ofertas.add(new Oferta(nick, ant+montante));
+				}
+				else
+					this.ofertas.add(new Oferta(nick,montante));				
 			}
-			else
-				this.ofertas.add(new Oferta(nick,montante));				
-		}	
-		notifyAll();
+		}
+		//notifyAll();
 	}
 }
 
