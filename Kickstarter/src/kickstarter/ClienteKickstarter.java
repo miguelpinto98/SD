@@ -37,11 +37,13 @@ public class ClienteKickstarter {
             o = null;
         	
         	if(opt==1) {
+        		System.out.println("#################### Novo Utilizador #####################");
+        		System.out.println("#                                                        #");
         		in.nextLine();
-        		System.out.println("Nick");
-        		String user = in.next();
-        		System.out.println("Pass");
-                String pw = in.next();
+        		System.out.println("#   Defina um username                                   #");
+        		String user = in.nextLine();
+        		System.out.println("#   Defina uma password                                  #");
+                String pw = in.nextLine();
                 
                 hash = new HashMap<>();
                 hash.put(ServidorKickstarter.NOME_USER, user);
@@ -53,15 +55,16 @@ public class ClienteKickstarter {
                 o.flush();
                 
         		BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
-        		System.out.println(sktInput.readLine());
-                
+        		System.out.println("#   "+sktInput.readLine());
         	} else {
         		if(opt == 2) {
+            		System.out.println("######################## Entrar ##########################");
+            		System.out.println("#                                                        #");
         			in.nextLine();
-            		System.out.println("Nick");
-            		String user = in.next();
-            		System.out.println("Pass");
-                    String pw = in.next();
+            		System.out.println("#   Introduza um username                                #");
+            		String user = in.nextLine();
+            		System.out.println("#   Introduza a password                                 #");
+                    String pw = in.nextLine();
                     
                     hash = new HashMap<>();
                     hash.put(ServidorKickstarter.NOME_USER, user);
@@ -81,34 +84,42 @@ public class ClienteKickstarter {
                     	menuPrincipal();
                     }
                     else {
-                    	System.err.println("Autenticação falhada");
+                    	System.err.println("#   Autenticação falhada                                 #");
+                		System.out.println("#                                                        #");
+                		System.out.println("##########################################################");
+
+
                     }
                 }
         		else {
         			if(opt == 3) {
-        				System.exit(3);
-        				//falta fazer logout();
-        				//nick = null;
+        				System.exit(0);
         			}
         			else
         				System.out.println("Opção inválida!");
         		}
         	}
         		
-        } while(true);
+        } while(opt<4 || opt>3);
 
     }
     
     public static void menuPrincipal() throws IOException, ClassNotFoundException {
-    	System.out.println(" 1 - Criar projeto");
-    	System.out.println(" 2 - Financiar projeto");
-    	System.out.println(" 3 - Lista projetos ainda não financiados");
-    	System.out.println(" 4 - Lista projetos com financiamento garantido");
-    	System.out.println(" 5 - Obter informações projeto");
-    	System.out.println(" 6 - Até já");
-    	
+		System.out.println("#################### Menu Principal ######################");
+		System.out.println("#                                                        #");
+		System.out.println("#   Bem Vindo "+nick);
+		System.out.println("#                                                        #");
+    	System.out.println("#   1 - Criar projeto                                    #");
+    	System.out.println("#   2 - Financiar projeto                                #");
+    	System.out.println("#   3 - Lista projetos ainda não financiados             #");
+    	System.out.println("#   4 - Lista projetos com financiamento garantido       #");
+    	System.out.println("#   5 - Obter informações projeto                        #");
+    	System.out.println("#   6 - Até já                                           #");
+		System.out.println("#                                                        #");
+		System.out.println("#   Escolha uma opção                                    #");
+		System.out.println("##########################################################");
     	int opt = in.nextInt();
-    	
+   	
     	do {
     		if(opt == 1 )
     			MenuCriarProjeto();
@@ -120,19 +131,26 @@ public class ClienteKickstarter {
     			MenuListaProjetosGarantidos();
     		if(opt == 5)
     			MenuInformacoesProjeto();
-    		if(opt == 6)
-    			System.exit(0);
-    		else
+    		if(opt == 6) {
+    			hash = new HashMap<>();
+                hash.put(ServidorKickstarter.NOME_USER, nick);
+                p = new Pacote(ServidorKickstarter.SAIR,hash);
+                criarObjeto(p);
+                
+                nick = null;
+                menuInicial();
+    		} else
     			System.out.println("Opcão inválida");	
     	} while(opt<6);
     }
     
     private static void MenuInformacoesProjeto() throws IOException, ClassNotFoundException {
     	in.nextLine();
-    	System.out.println("Código projeto");
+		System.out.println("################### Informações Projeto ##################");
+		System.out.println("#                                                        #");
+    	System.out.println("#   Insira o código do projeto                           #");
     	String id = in.next();
-    	
-    	System.out.println("Quantos contribuidores visiveis?");
+    	System.out.println("#   Insira o número de contribuidores visíveis           #");
     	String n = in.next();
     	
     	hash = new HashMap<>();
@@ -149,25 +167,30 @@ public class ClienteKickstarter {
     	
     	int nn = Integer.parseInt(n);
     	if(nn == 0 || nn > proj.getOfertas().size()) {
+    		System.out.println("#   Financiado por                                       #");
     		for(Oferta o : proj.getOfertas())
-    			System.out.println(o.getNick() + " - " + o.getDoado());
+    			System.out.println("#   Utilizador "+o.getNick() + " com " + o.getDoado());
     	} else {
+    		System.out.println("#   Financiado por                                       #");
 			Iterator<Oferta> it = proj.getOfertas().iterator();
 			int i=0;
 			while(it.hasNext() && i<nn) {
 				Oferta o = it.next();
-				System.out.println("Utilizador: "+o.getNick() + " Montante: "+o.getDoado());	
+				System.out.println("#   Utilizador: "+o.getNick() + " com "+o.getDoado());	
 				i++;
 			}
 				
     	} 
-    	
+		System.out.println("#                                                        #");
+		System.out.println("##########################################################");
     	menuPrincipal();
 	}
 
 	private static void MenuListaProjetosGarantidos() throws IOException, ClassNotFoundException {
 		in.nextLine();
-        System.out.println("Palavra chave: ");
+		System.out.println("############ Projetos Financiamento Garantido ############");
+		System.out.println("#                                                        #");
+        System.out.println("#   Palavra chave para pesquisa                          #");
         String desc = in.next();
         
         hash = new HashMap<>();
@@ -181,14 +204,18 @@ public class ClienteKickstarter {
 		HashSet<Projecto> projs = (HashSet<Projecto>) i.readObject();
     	
     	for(Projecto pr : projs)
-    		System.out.println("ID: "+pr.getCodigo()+" Nome Projeto: "+pr.getNome()+" Descrição: "+pr.getDescricao());
-	
+    		System.out.println("#   Código: "+pr.getCodigo()+"\n#   Nome Projeto: "+pr.getNome()+"\n#   Descrição: "+pr.getDescricao()+"\n#   ");
+
+		System.out.println("#                                                        #");
+		System.out.println("##########################################################");
     	menuPrincipal();
 	}
 
 	private static void MenuListaProjetosNaoFinanciados() throws IOException, ClassNotFoundException {
 		in.nextLine();
-        System.out.println("Palavra chave: ");
+		System.out.println("################ Projetos Não Financiados ################");
+		System.out.println("#                                                        #");
+        System.out.println("#   Palavra chave para pesquisa                          #");
         String desc = in.next();
         
         hash = new HashMap<>();
@@ -198,20 +225,23 @@ public class ClienteKickstarter {
         criarObjeto(p);
                 
         i = new ObjectInputStream(s.getInputStream());
-    	@SuppressWarnings("unchecked")
 		HashSet<Projecto> projs = (HashSet<Projecto>) i.readObject();
     	
     	for(Projecto pr : projs)
-    		System.out.println("ID: "+pr.getCodigo()+" Nome Projeto: "+pr.getNome()+" Descrição: "+pr.getDescricao());
+    		System.out.println("#   Código: "+pr.getCodigo()+"\n#   Nome Projeto: "+pr.getNome()+"\n#   Descrição: "+pr.getDescricao()+"\n#   ");
     	
+		System.out.println("#                                                        #");
+		System.out.println("##########################################################");
     	menuPrincipal();
 	}
 
 	private static void MenuFinanciarProjeto() throws IOException, ClassNotFoundException {
+		System.out.println("################### Financiar Projeto ####################");
+		System.out.println("#                                                        #");
 		in.nextLine();
-		System.out.println("Insira o id do projeto a financiar: ");
+		System.out.println("#   Insira o código do projeto a financiar               #");
 		int id = in.nextInt();
-		System.out.println("Insira montante que pretende financiar: ");
+		System.out.println("#   Insira montante de financiamento ao projeto          #");
 		double montante = in.nextDouble();
 		
 		hash = new HashMap<>();
@@ -225,17 +255,21 @@ public class ClienteKickstarter {
 		BufferedReader sktInput = new BufferedReader(new InputStreamReader(s.getInputStream()));
         System.out.println(sktInput.readLine());
         
-		
+		System.out.println("#                                                        #");
+		System.out.println("##########################################################");
 		menuPrincipal();
 	}
 
 	private static void MenuCriarProjeto() throws IOException, ClassNotFoundException{
+		System.out.println("###################### Novo Projeto ######################");
+		System.out.println("#                                                        #");
+
         in.nextLine();
-        System.out.println("Nome projeto");
+        System.out.println("#   Nome do projeto                                      #");
         String nomeProjeto = in.nextLine();
-        System.out.println("Descrição projeto");
+        System.out.println("#   Descrição do projeto                                 #");
         String descProjeto = in.nextLine();
-        System.out.println("Montante necessário para o projeto");
+        System.out.println("#   Montante necessário para iniciar projeto             #");
         String montanteProjeto = in.next();
                     
         hash = new HashMap<>();
@@ -255,14 +289,21 @@ public class ClienteKickstarter {
         	System.out.println(ss);
         } while(ss.contains("Recebeu"));
         
+		System.out.println("#                                                        #");
+		System.out.println("##########################################################");
         menuPrincipal();
 	}
 
 	public static int menuInicial() {
-    	System.out.println("1 - Registar");
-        System.out.println("2 - Entrar");
-        System.out.println("3 - Sair");
-        
+		System.out.println("###################### µKickstarter ######################");
+		System.out.println("#                                                        #");
+    	System.out.println("#   1 - Registar                                         #");
+        System.out.println("#   2 - Entrar                                           #");
+        System.out.println("#   3 - Sair                                             #");
+		System.out.println("#                                                        #");
+		System.out.println("#   Escolha uma opção:                                   #");
+		System.out.println("##########################################################");
+
         return in.nextInt();    
     }
 	

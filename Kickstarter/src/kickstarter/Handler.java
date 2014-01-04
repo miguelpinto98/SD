@@ -13,7 +13,7 @@ public class Handler extends Thread {
 	private ObjectInputStream sInput;
 	private PrintWriter sOutput;
 
-	public Handler(Socket s, Kickstarter k) {
+	public Handler(Socket s, Kickstarter k) throws InterruptedException {
         this.s= s;
         this.sk = k;
         this.sInput = null;
@@ -125,18 +125,24 @@ public class Handler extends Thread {
                         				out.flush();
                         			}
                         			else {
-                        				System.err.println("Pacote Informações Projeto");
-                            			String sid = pacote.getArgumentos().get(ServidorKickstarter.ID);
+                        				if(pacote.getAccao().equals(ServidorKickstarter.INF_PROJ)) {
+                        					System.err.println("Pacote Informações Projeto");
+                        					String sid = pacote.getArgumentos().get(ServidorKickstarter.ID);
                             			
-                            			int id = Integer.parseInt(sid);
-                            			System.out.println(id);
-                            			
-                        				Projecto res = sk.getProjectos().get(id);
+                        					int id = Integer.parseInt(sid);
+                        					System.out.println(id);
+                            				
+                        					Projecto res = sk.getProjectos().get(id);
                         				
-                        				ObjectOutputStream out = null;
-                        				out = new ObjectOutputStream(s.getOutputStream());
-                        				out.writeObject(res);
-                        				out.flush();
+                        					ObjectOutputStream out = null;
+                        					out = new ObjectOutputStream(s.getOutputStream());
+                        					out.writeObject(res);
+                        					out.flush();
+                        				} else {
+                        					System.err.println("Pacote Sair");
+                        					String nuser = pacote.getArgumentos().get(ServidorKickstarter.NOME_USER);
+                        					sk.logout(nuser);
+                        				}
                         			}
                         		}
                         	}

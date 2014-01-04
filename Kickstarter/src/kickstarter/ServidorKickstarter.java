@@ -29,20 +29,18 @@ public class ServidorKickstarter {
 	public static final String NCONTRIBUTOS = "NumeroContributosVisiveis";
 	public static final String INF_PROJ = "InformacaoProjeto";
 
+	public static final String SAIR = "SairKickstarter";
+
+	
     private static Kickstarter k = null;
 	
     public static void main(String args[]) throws IOException, ClassNotFoundException, InterruptedException {
         ServerSocket sv = new ServerSocket(PORTA);
         k = new Kickstarter();
         
-        k.registaUtilizador("abc", "123");
-        k.registaUtilizador("aaa", "111");
-        //k.novoProjeto("Arroz", "Com Pão", 232, "abc");
-        //k.ajudarProjeto("aaa", 1, 100);
-        //k.ajudarProjeto("asd", 1, 20);
-        //k.ajudarProjeto("aaa", 1, 50);
-        
-        //System.out.println(k.getProjectos().get(1).toString());
+        k.registaUtilizador("Serafim Pinto", "fifas");
+        k.registaUtilizador("Miguel Pinto", "jigs");
+        k.registaUtilizador("Mário Leite", "oitenta");
         
         while(true) {
             Socket cliente = sv.accept();

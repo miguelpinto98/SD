@@ -65,12 +65,15 @@ public class Kickstarter {
 			this.projectos.put(p.getCodigo(), p);
 			res = p.getCodigo();
 			
+			h.getSOutPut().println("#   Recebeu o código: "+res+", aguarda financiamento");
+			h.getSOutPut().flush();
+			
 			System.out.println("entrou no wait");
 			while(!p.isTerminado()) {
 				this.wait();
 				for(Oferta o : p.getOfertas()) {
 					if(o.getLida()==false) {
-						h.getSOutPut().println("Recebeu uma oferta " + o.getDoado());
+						h.getSOutPut().println("#   Recebeu uma oferta " + o.getDoado());
 						h.getSOutPut().flush();
 						o.setLida(true);
 					}
@@ -128,6 +131,11 @@ public class Kickstarter {
 			}
 		}
 		return res;
+	}
+
+
+	public void logout(String nick) {
+		this.utilizadores.get(nick).setAtivo(false);
 	}
 
 

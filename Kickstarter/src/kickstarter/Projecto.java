@@ -94,14 +94,14 @@ public class Projecto implements Serializable{
 	}
 
 	public String toString() {
-		StringBuilder s = new StringBuilder("***Projecto***\n");
-		s.append("Código: " + this.getCodigo());
-		s.append("\nProjeto de :" +this.getUtilizador());
-		s.append("\nNome: " + this.getNome());	
-		s.append("\nDescricao: " + this.getDescricao());	
-		s.append("\nMontante Requerido: " + this.getMontanteRequerido());
-		s.append("\nMontante já Adquirido: " + this.getMontanteAdquirido());        
-		s.append("\nFinanciamento Assegurado: " + this.isTerminado());
+		StringBuilder s = new StringBuilder();
+		s.append("#   Código: " + this.getCodigo());
+		s.append("\n#   Projeto de: " +this.getUtilizador());
+		s.append("\n#   Nome: " + this.getNome());	
+		s.append("\n#   Descrição: " + this.getDescricao());	
+		s.append("\n#   Montante requerido: " + this.getMontanteRequerido());
+		s.append("\n#   Montante já adquirido: " + this.getMontanteAdquirido());        
+		s.append("\n#   Financiamento já ssegurado? " + this.isTerminado());
 		
 		return s.toString();
 	}
