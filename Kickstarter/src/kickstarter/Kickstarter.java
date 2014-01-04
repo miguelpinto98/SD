@@ -35,7 +35,7 @@ public class Kickstarter {
 	}
 
 
-	public boolean registaUtilizador(String nick, String pass) {
+	public synchronized boolean registaUtilizador(String nick, String pass) {
 		boolean res = false;
 		if (!this.utilizadores.containsKey(nick)) {
 			Utilizador u = new Utilizador(nick, pass);
@@ -45,7 +45,7 @@ public class Kickstarter {
 		return res;
 	}
 
-	public boolean validaUser(String nick, String pass) {
+	public synchronized boolean validaUser(String nick, String pass) {
 		boolean res = false;
 
 		if (this.utilizadores.containsKey(nick)) {

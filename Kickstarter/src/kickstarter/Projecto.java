@@ -122,7 +122,7 @@ public class Projecto implements Serializable{
 		}
 	}
 
-	public boolean ajudarFinanciamento(String nick, double montante) {
+	public synchronized boolean ajudarFinanciamento(String nick, double montante) {
 		boolean res = false, encontrou = false;
 		Oferta of = null;
 		
