@@ -39,7 +39,6 @@ public class Handler extends Thread {
 
 					System.out.println("USER: " + nick + pw);
 					boolean existe = sk.registaUtilizador(nick, pw);
-					System.out.println("Registado? "+existe);
 					
 					if(existe)
 						sOutput.println("Inserido com Sucesso");
@@ -57,9 +56,8 @@ public class Handler extends Thread {
 						if(sk.getUtilizadores().containsKey(nick))
 							emSessao =  sk.getUtilizadores().get(nick).isAtivo();
 						
-						System.out.println(nick + pw);
+                        System.out.println("USER: " + nick + pw);
 						boolean existe = sk.validaUser(nick, pw);
-						System.out.println(existe);
 						
 						if(existe && !emSessao)
 							sOutput.println("Entrou");
@@ -76,16 +74,16 @@ public class Handler extends Thread {
                             int id = sk.novoProjeto(this,nome, desc, Double.parseDouble(montante), nick);
 						
                             if(id != -1)
-                                sOutput.println("Projecto criado com sucesso com o código "+id);
+                                sOutput.println("Projeto acabou de garantir financiamento :)");
                             else 
-                                sOutput.println("Projeto nao criado");
+                                sOutput.println("Projeto não criado");
 						
                             sOutput.flush();
                         } else {
                         	if(pacote.getAccao().equals(ServidorKickstarter.LISTANAOFINANCIADOS)) {
                                 System.err.println("Pacote Lista Nao Financiados");
                                 String desc = pacote.getArgumentos().get(ServidorKickstarter.DESC_PROJETO);
-                                System.out.println(desc);
+                                System.out.println("Pesquisa: "+desc);
                                 
                                 HashSet<Projecto> res = sk.devolveProjetosAtivos(desc);
                                 
@@ -104,12 +102,10 @@ public class Handler extends Thread {
                         			int id = Integer.parseInt(sid);
                         			double montante = Double.parseDouble(smon);
                         			
-                        			System.out.println(id);
-                        			System.out.println(montante);
+                        			System.out.println(id+" "+montante+"€");
                         			
                         			if(sk.getProjectos().containsKey(id)) {
                         				boolean res = sk.ajudarProjeto(user, id, montante);
-	                        			System.out.println("Financiado?"+res);
 	                        			if(res)
 	                        				sOutput.println("Financiado com sucesso");
 	                        			else
@@ -122,7 +118,7 @@ public class Handler extends Thread {
                         			if(pacote.getAccao().equals(ServidorKickstarter.PROJ_FINANCIADOS)) {
                         				System.err.println("Pacote Listar Projetos Financiados");
                         				String desc = pacote.getArgumentos().get(ServidorKickstarter.DESC_PROJETO);
-                        				System.out.println(desc);
+                                        System.out.println("Pesquisa: "+desc);
                         				
                         				HashSet<Projecto> res = sk.devolveProjetoTerminado(desc);
                         				

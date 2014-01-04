@@ -73,13 +73,16 @@ public class Kickstarter {
 				this.wait();
 				for(Oferta o : p.getOfertas()) {
 					if(o.getLida()==false) {
-						h.getSOutPut().println("#   Recebeu uma oferta " + o.getDoado());
+                        double valor = (p.getMontanteRequerido()-p.getMontanteAdquirido());
+                        if(valor<0)
+                            valor = 0;
+						h.getSOutPut().println("#   Recebeu uma oferta de " + o.getDoado() + "€. Faltam "+valor+"€.");
 						h.getSOutPut().flush();
 						o.setLida(true);
 					}
 				}
 			}
-			System.out.println("saiu wait");
+			System.out.println("saiu do wait");
 		}
 		return res;
 	}		

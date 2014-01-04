@@ -93,15 +93,20 @@ public class Projecto implements Serializable{
 		return new Projecto(this);
 	}
 
-	public String toString() {
+    public double percentagem() {
+        return ( (this.montanteAdquirido/this.montanteRequerido) * 100 );
+    }
+	
+        public String toString() {
 		StringBuilder s = new StringBuilder();
 		s.append("#   Código: " + this.getCodigo());
+        s.append("\n#   Fundos financiados: " +percentagem()+"%");
 		s.append("\n#   Projeto de: " +this.getUtilizador());
 		s.append("\n#   Nome: " + this.getNome());	
 		s.append("\n#   Descrição: " + this.getDescricao());	
 		s.append("\n#   Montante requerido: " + this.getMontanteRequerido());
 		s.append("\n#   Montante já adquirido: " + this.getMontanteAdquirido());        
-		s.append("\n#   Financiamento já ssegurado? " + this.isTerminado());
+		s.append("\n#   Financiamento já assegurado? " + this.isTerminado());
 		
 		return s.toString();
 	}
