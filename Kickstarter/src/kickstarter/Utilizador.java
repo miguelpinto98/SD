@@ -3,6 +3,10 @@ package kickstarter;
 import java.io.Serializable;
 
 public class Utilizador implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String nickname;	
 	private String password;
 	private boolean ativo;

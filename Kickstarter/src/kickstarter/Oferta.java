@@ -3,6 +3,10 @@ package kickstarter;
 import java.io.Serializable;
 
 public class Oferta implements Comparable<Oferta>, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String nick;
 	private double doado;
 	private boolean lida;

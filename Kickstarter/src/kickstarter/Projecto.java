@@ -5,6 +5,10 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 public class Projecto implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int codigo;
 	private String user;
 	private String nome;

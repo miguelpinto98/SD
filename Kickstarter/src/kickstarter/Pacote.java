@@ -14,7 +14,11 @@ import java.util.HashMap;
  * @author serafim
  */
 public class Pacote implements Serializable{
-    private String accao;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String accao;
     private HashMap<String,String> argumentos; //chave NomeUser -- serafim
 
     public Pacote(String a, HashMap<String,String> args) {

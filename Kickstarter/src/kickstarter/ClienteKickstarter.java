@@ -9,9 +9,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.NavigableSet;
 import java.util.Scanner;
-import java.util.TreeSet;
 
 public class ClienteKickstarter {
     private static String ip = "localhost";
@@ -250,6 +248,7 @@ public class ClienteKickstarter {
         criarObjeto(p);
                 
         i = new ObjectInputStream(s.getInputStream());
+		@SuppressWarnings("unchecked")
 		HashSet<Projecto> projs = (HashSet<Projecto>) i.readObject();
     	
 		if(!projs.isEmpty()) {
