@@ -1,6 +1,7 @@
 cd ~/Desktop/GitHub/SD/Kickstarter/teste
 
-i=0;
+for i in `seq 1 100`
+do
 echo "1" >> $i.input
 echo $i >> $i.input
 echo $i >> $i.input
@@ -8,14 +9,15 @@ echo "2" >> $i.input
 echo $i >> $i.input
 echo $i >> $i.input
 echo "1" >> $i.input
-echo "ProjectoTESTE!!!!!" >> $i.input
-echo "sssssssssssssssss" >> $i.input
-echo "100" >> $i.input
+echo $i >> $i.input
+echo $i >> $i.input
+echo "50" >> $i.input
 echo "6" >> $i.input
 echo "3" >> $i.input
+done
 
 
-for i in `seq 1 150`
+for i in `seq 101 200`
 do
 	echo "1" >> $i.input
 	echo $i >> $i.input
@@ -24,20 +26,24 @@ do
 	echo $i >> $i.input
 	echo $i >> $i.input
 	echo "2" >> $i.input
-	echo "1" >> $i.input
-	echo "1" >> $i.input
+	echo $(( i-100 )) >> $i.input
+	echo "10" >> $i.input
 	echo "6" >> $i.input
 	echo "3" >> $i.input
 done
 
 cd ~/Desktop/GitHub/SD/Kickstarter/build/classes
 
-java kickstarter.ClienteKickstarter < ../../teste/0.input > ../../teste/0.output &
+for i in `seq 1 100`
+do
+java kickstarter.ClienteKickstarter < ../../teste/$i.input > /dev/null &
+done
 
-sleep 5
+sleep 20
 
+echo "a financiar projectos"
 
-for i in `seq 1 150`
+for i in `seq 101 200`
 do
 	java kickstarter.ClienteKickstarter < ../../teste/$i.input > /dev/null &
 done
