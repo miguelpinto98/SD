@@ -367,18 +367,6 @@ public class ClienteKickstarter {
     } catch (Exception e) {  
        isDouble = false;  
     } 
-/*
-    for(int i = 0; i < s.length(); i++){
-        char caractere = s.charAt(i);
-        if(caractere == ',') 
-        	i++;
-        else {
-        	if( !Character.isDigit(caractere)) {
-        		res = false;
-        		break;
-        	}
-        }
-    }*/
     return isDouble;
-}
+    }
 }
