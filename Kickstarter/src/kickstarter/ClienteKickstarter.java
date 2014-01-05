@@ -98,7 +98,7 @@ public class ClienteKickstarter {
                     }
                 }
         		else {
-        			if(opt.equals("2")) {
+        			if(opt.equals("3")) {
         				System.exit(0);
         			}
         			else
