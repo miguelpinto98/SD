@@ -119,7 +119,7 @@ public class ClienteKickstarter {
     	System.out.println("#   3 - Lista projetos ainda não financiados             #");
     	System.out.println("#   4 - Lista projetos com financiamento garantido       #");
     	System.out.println("#   5 - Obter informações projeto                        #");
-    	System.out.println("#   6 - Até já                                           #");
+    	System.out.println("#   6 - Logout	                                           #");
 		System.out.println("#                                                        #");
 		System.out.println("#   Escolha uma opção                                    #");
 		System.out.println("##########################################################");
@@ -340,7 +340,7 @@ public class ClienteKickstarter {
 		System.out.println("#                                                        #");
     	System.out.println("#   1 - Registar                                         #");
         System.out.println("#   2 - Entrar                                           #");
-        System.out.println("#   3 - Sair                                             #");
+        System.out.println("#   3 - Sair da aplicação                                             #");
 		System.out.println("#                                                        #");
 		System.out.println("#   Escolha uma opção:                                   #");
 		System.out.println("##########################################################");
