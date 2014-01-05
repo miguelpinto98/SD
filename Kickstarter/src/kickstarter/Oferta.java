@@ -15,11 +15,13 @@ public class Oferta implements Comparable<Oferta>, Serializable{
 	public Oferta(String nick, double mont) {
 		this.nick = nick;
 		this.doado = mont;
+		this.lida = false;
 	}
 	
 	public Oferta(Oferta o) {
 		this.nick = o.getNick();
 		this.doado = o.getDoado();
+		this.lida = o.getLida();
 	}
 	
 	public String getNick() {
@@ -39,9 +41,17 @@ public class Oferta implements Comparable<Oferta>, Serializable{
 	}
  
 	public int compareTo(Oferta o) {
-		if(o.getDoado() < this.doado) return -1;
-		if(o.getDoado() > this.doado) return 1;
-		else return 0;
+		if(o.getDoado() < this.doado) 
+			if(o.getNick().compareTo(this.nick) != 0)
+				return -1;
+			else
+				return 0;
+		else {
+			if(o.getNick().compareTo(this.nick) != 0) 
+				return 1;
+			else
+				return 0;
+		}
 	}
 	
 	public Oferta clone() {

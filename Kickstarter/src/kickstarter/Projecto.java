@@ -76,7 +76,7 @@ public class Projecto implements Serializable{
 		TreeSet<Oferta> res = new TreeSet<>();
 		
 		for(Oferta o : this.ofertas)
-			res.add(o.clone());
+			res.add(o);
 		
 		return res;
 	}
@@ -94,7 +94,10 @@ public class Projecto implements Serializable{
 	}
 
     public double percentagem() {
-        return ( (this.montanteAdquirido/this.montanteRequerido) * 100 );
+    	if(this.montanteAdquirido<this.montanteRequerido)
+    		return ((this.montanteAdquirido/this.montanteRequerido) * 100 );
+    	else
+    		return 100;
     }
 	
         public String toString() {
@@ -132,7 +135,7 @@ public class Projecto implements Serializable{
 			if(this.ofertas.isEmpty()) {
 				this.ofertas.add(new Oferta(nick, montante));
 			} else {
-				Iterator<Oferta> it =this.ofertas.iterator();
+				Iterator<Oferta> it = this.ofertas.iterator();
 				while(it.hasNext() && !encontrou) {
 					if((of = it.next()).getNick().equals(nick))
 						encontrou=true;
@@ -146,8 +149,6 @@ public class Projecto implements Serializable{
 			}
 			res = true;
 		}
-	
-		
 		return res;
 	}
 }
